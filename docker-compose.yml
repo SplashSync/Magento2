@@ -1,0 +1,110 @@
+################################################################################
+#
+#  This file is part of SplashSync Project.
+#
+#  Copyright (C) Splash Sync <www.splashsync.com>
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+#  For the full copyright and license information, please view the LICENSE
+#  file that was distributed with this source code.
+#
+#  @author Bernard Paquier <contact@splashsync.com>
+#
+################################################################################
+
+################################################################################
+# Docker Compose File
+#
+# This Docker File intend to Create a Complete Dev Environment
+# for Splash Modules on Magento 2
+#
+# To us different PS Version configured, you need to add hosts to /etc/hosts
+#
+# 172.104.0.99        latest.magento.local
+# 172.104.0.100       toolkit.magento.local
+# 172.104.0.200       phpmyadmin.magento.local
+#
+################################################################################
+
+version: '3.0'
+
+services:
+
+    ################################################################################
+    # Magento 2 Latest
+    magento:
+        image: alexcheng/magento2
+        container_name: magento2-latest
+        ports:
+            - "80:80"
+        depends_on:
+            - mysql
+        volumes:
+            - magento-data:/var/www/html
+            - "./:/var/www/module:ro"
+        command: sh /var/www/module/docker/magento/docker-entrypoint.sh
+        env_file:
+            - docker/magento/env
+        networks:
+            magento2:       { ipv4_address: 172.104.0.99 }
+            splashsync:     { aliases: [ latest.magento2.local ] }
+
+    ################################################################################
+    # MySQL Container
+    mysql:
+        image: mysql:5.7
+        container_name: magento2-mysql
+        logging: { driver: "none" }
+        env_file:
+          - docker/magento/env
+        networks:
+          - magento2
+
+    ################################################################################
+    # Splash Toolkit Container
+    toolkit:
+        image: 'splashsync/toolkit'
+        container_name: magento2-toolkit
+        logging: { driver: "none" }
+  #      volumes:
+  #        # Specify Local Configuration File
+  #        - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
+        hostname:           toolkit.magento2.local
+        command:            ["php", "/app/bin/console", "server:run", "172.104.0.100:80"]
+        networks:
+            magento2:       { ipv4_address: 172.104.0.100, aliases: [ toolkit.magento2.local ] }
+            splashsync:     { aliases: [ toolkit.magento2.local ] }
+
+    ################################################################################
+    # PhpMyAdmin Container
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:5
+        container_name: magento2-phpmyadmin
+        logging: { driver: "none" }
+        depends_on:
+          - mysql
+        env_file:
+          - docker/magento/env
+        networks:
+          magento2:       { ipv4_address: 172.104.0.200, aliases: [ phpmyadmin.magento2.local ] }
+
+
+volumes:
+  magento-data:
+  db-data:
+
+networks:
+  ################################################################################
+  # Default Private Network
+  magento2:
+      driver: bridge
+      ipam:
+          config:
+              - subnet: 172.104.0.0/24
+  ################################################################################
+  # External Splash Network
+  splashsync:
+      external: true

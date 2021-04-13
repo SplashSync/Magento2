@@ -1,0 +1,36 @@
+{
+    "name":                 "splash/magento2",
+    "description":          "Splash Module for Magento 2",
+    "type":                 "magento2-module",
+    "license":              "MIT",
+    "minimum-stability":    "dev",
+    "prefer-stable":        true,
+
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Splash\\Local\\": "src"
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+
+    "require": {
+        "php":                              "^7.2",
+        "splash/phpcore":                   "@stable"
+    },
+    
+    "require-dev": {
+        "badpixxel/php-sdk":                "dev-main"
+    },
+    
+    "autoload-dev": {
+        "psr-4": { 
+            "Splash\\Tests\\":  "app/code/local/SplashSync/Splash/Tests/"
+        }
+    }
+    
+}
