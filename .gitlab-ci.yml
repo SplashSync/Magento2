@@ -25,7 +25,7 @@
 # Functional Tests
 ################################################################
 
-.core_tests:    &core_tests
+core_tests:
     image:      alexcheng/magento2
 #    stage:      tests
 #    retry:      2
