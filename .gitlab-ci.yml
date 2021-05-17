@@ -1,0 +1,70 @@
+################################################################################
+#
+#  This file is part of SplashSync Project.
+#
+#  Copyright (C) Splash Sync <www.splashsync.com>
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+#  For the full copyright and license information, please view the LICENSE
+#  file that was distributed with this source code.
+#
+#  @author Bernard Paquier <contact@splashsync.com>
+#
+################################################################################
+
+################################################################
+# Defined Pipeline Stages
+#stages:
+#  - tests
+#  - deploy
+
+################################################################
+# Functional Tests
+################################################################
+
+.core_tests:    &core_tests
+    image:      alexcheng/magento2
+#    stage:      tests
+#    retry:      2
+    tags:
+      - Dedicated
+    services:
+      - name: mysql:5.7
+
+    ################################################################################
+    # Install & Configure Environment
+    before_script:
+      # Init Docker
+      - echo "Install Magento"
+      - install-magento
+    ################################################################################
+    # Run Test Script
+    script:
+      - php bin/magento
+    ################################################################################
+    # Run After Script
+#    after_script:
+
+
+#################################################################
+## Build Documentation
+#################################################################
+#pages:
+#    image:      registry.gitlab.com/splashsync/php-console:pages
+#    stage:      deploy
+#    retry:      2
+#    tags:
+#      - Dedicated
+#    ################################################################################
+#    # Run Test Script
+#    script:
+#      # Run Composer to Build Dependencies
+#      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+#      # Build Documentation
+#      - php vendor/bin/grumphp run --tasks=build-docs
+#    artifacts:
+#        paths:
+#            - public
