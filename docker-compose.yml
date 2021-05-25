@@ -23,9 +23,9 @@
 #
 # To us different PS Version configured, you need to add hosts to /etc/hosts
 #
-# 172.104.0.99        latest.magento.local
-# 172.104.0.100       toolkit.magento.local
-# 172.104.0.200       phpmyadmin.magento.local
+# 172.104.0.99        latest.magento2.local
+# 172.104.0.100       toolkit.magento2.local
+# 172.104.0.200       phpmyadmin.magento2.local
 #
 ################################################################################
 
@@ -43,8 +43,8 @@ services:
         depends_on:
             - mysql
         volumes:
-            - magento-data:/var/www/html
-            - "./:/var/www/module:ro"
+            - ./:/var/www/module:ro
+            - /mnt/data/WebDesign/GitHub/Splash/Php-Core:/var/www/phpcore:ro
         command: sh /var/www/module/docker/magento/docker-entrypoint.sh
         env_file:
             - docker/magento/env
@@ -69,9 +69,9 @@ services:
         image: 'splashsync/toolkit'
         container_name: magento2-toolkit
         logging: { driver: "none" }
-  #      volumes:
-  #        # Specify Local Configuration File
-  #        - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
+        volumes:
+            # Specify Local Configuration File
+            - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
         hostname:           toolkit.magento2.local
         command:            ["php", "/app/bin/console", "server:run", "172.104.0.100:80"]
         networks:
@@ -94,7 +94,6 @@ services:
 
 volumes:
   magento-data:
-  db-data:
 
 networks:
   ################################################################################

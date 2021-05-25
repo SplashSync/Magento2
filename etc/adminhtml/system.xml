@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="splashsync" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Splash Sync</label>
+            <tab>service</tab>
+            <resource>SplashSync_Magento2::config</resource>
+            <group id="core" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Server Connection</label>
+                <comment>
+                    Connection parameters for your module on Splash Server.
+                    Once your have created your account, declare a new server and enter your credentials here.
+                </comment>
+
+                <field id="id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Server Identifier</label>
+                    <comment>The unique identifier given by Splash Server.</comment>
+                    <validate>required-entry no-whitespace</validate>
+                </field>
+
+                <field id="key" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Encryption Key</label>
+                    <comment>The unique encryption key given by Splash Server.</comment>
+                    <validate>required-entry no-whitespace</validate>
+                </field>
+
+                <field id="expert" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Expert Mode</label>
+                    <comment>In this mode, you can access more detailed module informations.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="host" type="text" translate="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Server Url</label>
+                    <comment>Use a custom Url to contact Splash Server. Only uses this option if you uses SandBox Servers</comment>
+                    <validate>required-entry no-whitespace</validate>
+                    <depends>
+                        <field id="expert">1</field>
+                    </depends>
+                </field>
+
+                <field id="use_nusoap" type="select" translate="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Force NuSOAP</label>
+                    <comment>In this mode, Webservice will use NuSOAP as an Alternative webservice library. Only use if you php-soap extension is missing.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="expert">1</field>
+                    </depends>
+                </field>
+
+                <field id="test" translate="label comment tooltip" type="button" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Test Connexion</label>
+                    <frontend_model>SplashSync\Magento2\Block\Adminhtml\System\Config\TestConnexion</frontend_model>
+                </field>
+
+            </group>
+
+            <group id="security" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Security</label>
+                <comment>
+                    Splash Security Login Configuration
+                </comment>
+
+                <field id="username" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Username</label>
+                    <comment>Name of user to use for all webservice transactions.</comment>
+                    <validate>required-entry no-whitespace</validate>
+                </field>
+            </group>
+
+            <group id="products" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Products Synchronization</label>
+                <comment>
+                    Configure Splash Module for Products Synchronisations.
+                </comment>
+
+                <field id="attribute_set" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Attribute Set</label>
+                    <comment>Select Attributes Set used when Products are created by Splash.</comment>
+                    <validate>required-entry no-whitespace</validate>
+                    <source_model>Magento\Catalog\Model\Product\AttributeSet\Options</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

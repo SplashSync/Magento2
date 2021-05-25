@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="SplashSync_Magento2::greetings"
-             title="Greetings" translate="title" module="SplashSync_Magento2" parent="Magento_Backend::content" sortOrder="50" dependsOnModule="SplashSync_Magento2" resource="SplashSync_Magento2::greetings"/>
-        <add id="SplashSync_Magento2::greetings_helloworld" title="Hello World" translate="title" module="SplashSync_Magento2" parent="SplashSync_Magento2::greetings" sortOrder="10" dependsOnModule="SplashSync_Magento2" action="splash/helloworld" resource="SplashSync_Magento2::greetings"/>
-    </menu>
-</config>

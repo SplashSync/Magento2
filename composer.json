@@ -11,26 +11,53 @@
             "registration.php"
         ],
         "psr-4": {
-            "Splash\\Local\\": "src"
+            "SplashSync\\Magento2\\Controller\\":   "Controller",
+            "SplashSync\\Magento2\\Observer\\":     "Observer",
+            "SplashSync\\Magento2\\Block\\":        "Block",
+            "Splash\\Local\\":                      "src"
         },
         "exclude-from-classmap": [
-            "/Tests/"
+            "/tests/"
         ]
     },
 
     "require": {
-        "php":                              "^7.2",
-        "splash/phpcore":                   "@stable"
+        "php":                                  "^7.2",
+        "splash/phpcore":                       "dev-master"
     },
-    
+
     "require-dev": {
-        "badpixxel/php-sdk":                "dev-main"
+        "magento/product-community-edition":    "^2.4.2",
+        "badpixxel/php-sdk":                    "dev-main"
     },
-    
+
     "autoload-dev": {
-        "psr-4": { 
-            "Splash\\Tests\\":  "app/code/local/SplashSync/Splash/Tests/"
+        "psr-4": {
+            "Splash\\Tests\\":  "/tests/"
+        },
+        "files":    [
+            "vendor/splash/phpcore/inc/defines.inc.php",
+            "vendor/splash/phpcore/inc/Splash.Inc.php"
+        ]
+    },
+
+    "scripts": {
+        "auto-scripts": [
+            "rm -Rf ./app ./bin ./dev ./lib ./generated ./phpserver ./pub ./setup ./var",
+            "rm -Rf ./COPYING.txt./*.sample"
+        ],
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+
+    "repositories": {
+        "magento": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
         }
     }
-    
 }

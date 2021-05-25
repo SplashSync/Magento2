@@ -18,44 +18,42 @@
 
 set -e
 
-## Configure Apache
-#bash /var/www/html/ci/scripts/config_apache.sh
-#
-## Install N89 Mage Run
-#bash /var/www/html/ci/scripts/install_magerun.sh
-#
-#
-#if [ ! -f installed.txt ]; then
-#  # Install Magento
-#  bash /var/www/html/ci/scripts/install_magento.sh
-#
-#  # Configure Magento
-#  bash /var/www/html/ci/scripts/config_magento.sh
-#fi
-#
-#echo ${MAGENTO_VERSION} > installed.txt
+################################################################################
+# Ensure Splash Vendor DIR doesn't exists
+if [ -d /var/www/module/vendor ]; then
+    echo "Module Vendor MUST be Deleted before Docker Start"
+    exit 1
+fi
+
+################################################################################
+# Wait for Mysql Server Wakeup
+sh /var/www/module/scripts/wait-for-mysql.sh
+
+################################################################################
+# First Time => INSTALL MAGENTO + SAMPLE DATA
+if [ ! -f installed.txt ]; then
+    echo "Install Magento"
+    install-magento
+#    echo "Install Sample data"
+#    install-sampledata
+fi
+echo "Installed" > installed.txt
 
 su www-data
 
 ################################################################################
-echo "Install SplashSync Module via Composer"
-composer config repositories.splash '{ "type": "path", "url": "/var/www/module", "options": { "symlink": true } }'
-composer require splash/magento2:dev-master --no-scripts --update-with-dependencies
-composer info | grep "splash"
+# Install Phpunit
+sh /var/www/module/scripts/install-phpunit.sh
+################################################################################
+# Install SplashSync Module
+sh /var/www/module/scripts/install-dev-module.sh
+################################################################################
+# Configure Magento for Development & Tests
+sh /var/www/module/scripts/setup-magento.sh
+################################################################################
+# Compile Magento
+sh /var/www/module/scripts/compile-magento.sh
 
 ################################################################################
-echo "Enable SplashSync Module"
-php bin/magento module:enable SplashSync_Magento2
-
-################################################################################
-echo "Enable Developer Mode"
-#php bin/magento deploy:mode:set developer
-
-php bin/magento setup:upgrade
-php bin/magento setup:di:compile
-php bin/magento cache:clean
-
-chown -R www-data:www-data /var/www/html/
-
+echo "Init Magento"
 exec /sbin/my_init
-#exec apache2-foreground

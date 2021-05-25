@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="model_save_before">
+        <observer name="splashEventSaveBefore" instance="SplashSync\Magento2\Observer\OnSaveBefore" />
+    </event>
+    <event name="model_save_commit_after">
+        <observer name="splashEventSaveBefore" instance="SplashSync\Magento2\Observer\OnSaveAfter" />
+    </event>
+    <event name="model_delete_commit_after">
+        <observer name="splashEventSaveBefore" instance="SplashSync\Magento2\Observer\OnDeleteAfter" />
+    </event>
+</config>

@@ -13,10 +13,13 @@
  *  file that was distributed with this source code.
  */
 
-use Magento\Framework\Component\ComponentRegistrar;
+namespace   Splash\Local\Widgets;
 
-ComponentRegistrar::register(
-    ComponentRegistrar::MODULE,
-    'SplashSync_Magento2',
-    isset($file) && realpath($file) == __FILE__ ? dirname($file) : __DIR__
-);
+use Splash\Templates\Widgets\SelfTestTemplate;
+
+/**
+ * Template Widget for Splash Modules
+ */
+class SelfTest extends SelfTestTemplate
+{
+}
