@@ -1,16 +1,27 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product\Variants;
-
 
 use ArrayObject;
 use Exception;
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product;
-use Splash\Local\Helpers\AttributesHelper;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
 use Splash\Client\Splash;
+use Splash\Local\Helpers\AttributesHelper;
 
 /**
  * Product Variants Attributes Trait
@@ -114,7 +125,7 @@ trait AttributesTrait
     {
         //====================================================================//
         // Variants Infos are Only Used on Create
-        if ($fieldName != "attributes") {
+        if ("attributes" != $fieldName) {
             return;
         }
         //====================================================================//
@@ -128,7 +139,7 @@ trait AttributesTrait
             $fieldData = ($fieldData instanceof ArrayObject) ? $fieldData->getArrayCopy() : (array) $fieldData;
             //====================================================================//
             // Update Product Configurable Attributes
-            if($this->updateUsedAttributesIds($fieldData)) {
+            if ($this->updateUsedAttributesIds($fieldData)) {
                 $this->updateAttributesValues($fieldData);
             }
         }
@@ -143,7 +154,7 @@ trait AttributesTrait
     /**
      * Update Parent Product Attributes Associations
      *
-     * @param array  $fieldData Field Data
+     * @param array $fieldData Field Data
      *
      * @return bool
      */
@@ -200,8 +211,9 @@ trait AttributesTrait
      *
      * @param array $fieldData Field Data
      *
-     * @return bool
      * @throws Exception
+     *
+     * @return bool
      */
     private function updateAttributesValues(array $fieldData): bool
     {

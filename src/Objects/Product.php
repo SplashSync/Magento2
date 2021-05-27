@@ -15,15 +15,15 @@
 
 namespace   Splash\Local\Objects;
 
-use Magento\Catalog\Model\Product as MageProduct;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product as MageProduct;
 use Splash\Local\Helpers\MageHelper;
 use Splash\Models\AbstractObject;
+use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\PricesTrait;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Splash\Models\Objects\UnitsHelperTrait;
 
 /**

@@ -16,8 +16,6 @@
 namespace Splash\Local\Objects\Product;
 
 use Exception;
-use Mage;
-use Splash\Client\Splash;
 use Splash\Local\Helpers\MageHelper;
 use Splash\Local\Helpers\TaxHelper;
 
@@ -81,7 +79,6 @@ trait PricesTrait
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
-
             case 'price':
             case 'cost':
             case 'msrp':
@@ -103,7 +100,7 @@ trait PricesTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData      Field Data
+     * @param mixed  $fieldData Field Data
      *
      * @return void
      */
@@ -137,7 +134,7 @@ trait PricesTrait
                 }
                 //====================================================================//
                 // Update Product Tax Class
-                if($fieldName == "price") {
+                if ("price" == $fieldName) {
                     $newTaxId = TaxHelper::getBestPriceTaxClass((float) self::prices()->taxPercent($fieldData));
                     if ($this->object->getData("tax_class_id") != $newTaxId) {
                         $this->object->setData("tax_class_id", $newTaxId);
@@ -155,14 +152,24 @@ trait PricesTrait
     /**
      * Encode Magento Product Price
      *
-     * @return array
+     * @param float       $priceHT
+     * @param int         $taxClassId
+     * @param null|string $code
+     * @param null|string $symbol
+     *
      * @throws Exception
+     *
+     * @return array
      */
-    protected static function toProductPrice(float $priceHT, int $taxClassId, ?string $code = null, ?string $symbol = null): array
-    {
+    protected static function toProductPrice(
+        float $priceHT,
+        int $taxClassId,
+        ?string $code = null,
+        ?string $symbol = null
+    ): array {
         //====================================================================//
         // Build Price Array
-        $price =  self::prices()->encode(
+        $price = self::prices()->encode(
             $priceHT,
             (float) TaxHelper::getTaxRateById($taxClassId),
             null,

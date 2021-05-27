@@ -15,10 +15,9 @@
 
 namespace SplashSync\Magento2\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Splash\Client\Splash;
-use Splash\Local\Local;
 
 /**
  * OnSaveBefore Event is Triggered after Each Db Save Action
@@ -42,7 +41,7 @@ class OnSaveAfter extends AbstractObserver implements ObserverInterface
         // Translate Object Type & Comment
         $objectType = self::getObjectType($object);
         $comment = self::getObjectName($object);
-        if(empty(self::$action) || empty($objectType)) {
+        if (empty(self::$action) || empty($objectType)) {
             return;
         }
         //====================================================================//

@@ -18,5 +18,5 @@ use Magento\Framework\Component\ComponentRegistrar;
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
     'SplashSync_Magento2',
-    isset($file) && realpath($file) == __FILE__ ? dirname($file) : __DIR__
+    isset($file) && __FILE__ == realpath($file) ? dirname($file) : __DIR__
 );

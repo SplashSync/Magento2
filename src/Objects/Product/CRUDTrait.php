@@ -15,9 +15,9 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Magento\Catalog\Model\Product;
 use Splash\Client\Splash;
 use Splash\Local\Helpers\MageHelper;
-use Magento\Catalog\Model\Product;
 use Throwable;
 
 /**
@@ -118,7 +118,7 @@ trait CRUDTrait
         $parent = $this->getParentProduct((int) $objectId);
         //====================================================================//
         // Execute Generic Magento Delete Function ...
-        $deleteResult =  $this->coreDelete((int) $objectId);
+        $deleteResult = $this->coreDelete((int) $objectId);
         //====================================================================//
         // If We are Deleting the Last Simple Product of a Configurable
         if ($parent && empty($this->getChildrenIds($parent->getEntityId()))) {
@@ -127,7 +127,6 @@ trait CRUDTrait
 
         return $deleteResult;
     }
-
 
     /**
      * Create a Simple Product

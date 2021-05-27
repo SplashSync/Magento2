@@ -16,13 +16,11 @@
 namespace Splash\Tests;
 
 use Exception;
-use Magento\Catalog\Model\ResourceModel\Product as MageProduct;
-use Splash\Local\Helpers\MageHelper;
-use Splash\Local\Objects\Order;
-use Splash\Tests\Tools\ObjectsCase;
-use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product as MageProduct;
 use Splash\Local\Helpers\AttributesHelper;
+use Splash\Local\Helpers\MageHelper;
+use Splash\Tests\Tools\ObjectsCase;
 
 /**
  * Local Objects Test Suite - Populate catalog with Tests Attributes.
@@ -34,8 +32,9 @@ class L01PopulateAttributesTest extends ObjectsCase
      *
      * @dataProvider productVariantAttributesProvider
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function testProductVariantAttributes(string $name, array $options)
     {
@@ -80,7 +79,7 @@ class L01PopulateAttributesTest extends ObjectsCase
         // Verify Attribute
         $upAttribute = $model->getAttribute($name);
         $this->assertInstanceOf(Attribute::class, $upAttribute);
-        $this->assertEquals(count($options)+1, count((array) $upAttribute->getOptions()));
+        $this->assertEquals(count($options) + 1, count((array) $upAttribute->getOptions()));
     }
 
     /**
@@ -93,7 +92,7 @@ class L01PopulateAttributesTest extends ObjectsCase
         //====================================================================//
         // Build variant Attribute Options List
         $options = array();
-        for($i=1; $i<20; $i++) {
+        for ($i = 1; $i < 20; $i++) {
             $options["option_".$i] = "Value ".$i;
         }
         //====================================================================//

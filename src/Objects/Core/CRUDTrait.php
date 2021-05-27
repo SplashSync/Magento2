@@ -70,7 +70,7 @@ trait CRUDTrait
     /**
      * Generic Delete of requested Object
      *
-     * @param int|null $objectId Object Id.  If NULL, Object needs to be created.
+     * @param null|int $objectId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
      */
@@ -84,6 +84,7 @@ trait CRUDTrait
         if (empty($objectId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
         }
+
         try {
             //====================================================================//
             // Load Object From DataBase
@@ -91,6 +92,7 @@ trait CRUDTrait
         } catch (Throwable $exception) {
             return true;
         }
+
         try {
             //====================================================================//
             // Delete Object From DataBase

@@ -1,11 +1,23 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Local\Helpers\MageHelper;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use Splash\Local\Helpers\MageHelper;
 
 /**
  * Product Stock Fields
@@ -53,7 +65,6 @@ trait StockTrait
                 $this->out[$fieldName] = $stockItem ? (int) $stockItem->getQty() : 0;
 
                 break;
-
             case 'is_in_stock':
                 $stockItem = self::getStockItem($this->object->getEntityId());
                 $this->out[$fieldName] = !$stockItem || !$stockItem->getIsInStock();
@@ -117,5 +128,4 @@ trait StockTrait
         /** @phpstan-ignore-next-line */
         return $registry->get($productId) ?: null;
     }
-
 }

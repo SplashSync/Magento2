@@ -15,10 +15,10 @@
 
 namespace Splash\Local\Objects\Core;
 
+use Magento\Catalog\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Helpers\MageHelper;
-use Magento\Catalog\Model\AbstractModel;
 
 /**
  * Generic Magento Object List Parser
@@ -69,7 +69,7 @@ trait ObjectListTrait
      * Setup Magento Collection Pagination
      *
      * @param AbstractCollection $collection
-     * @param array      $params
+     * @param array              $params
      *
      * @return int
      */
@@ -100,7 +100,7 @@ trait ObjectListTrait
      * Return Magento Collection Data
      *
      * @param AbstractCollection $collection
-     * @param int        $total
+     * @param int                $total
      *
      * @return array
      */

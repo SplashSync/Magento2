@@ -1,5 +1,17 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product\Variants;
 
@@ -50,17 +62,16 @@ trait CRUDTrait
      *
      * @param Product $product
      *
-     *
      * @return null|Product
      */
     protected function createConfigurableProduct(Product $product): ?Product
     {
         //====================================================================//
         // Search for Existing Parent Product by Child Ids
-        $this->parent  = $this->identifyParentFromVariants();
+        $this->parent = $this->identifyParentFromVariants();
         //====================================================================//
         // Parent Product Not Found
-        if(!$this->parent) {
+        if (!$this->parent) {
             //====================================================================//
             // Create a New Configurable Product Class
             $this->parent = $this->createSimpleProduct();

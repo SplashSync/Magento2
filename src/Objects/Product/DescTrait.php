@@ -32,61 +32,61 @@ trait DescTrait
         //====================================================================//
 
 //        foreach ($this->getAvailableLanguages() as $isoLang) {
-            //====================================================================//
-            // Name without Options
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("name")
-                ->Name("Product Name without Options")
-                ->Group("Description")
-                ->MicroData("http://schema.org/Product", "name")
+        //====================================================================//
+        // Name without Options
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("name")
+            ->Name("Product Name without Options")
+            ->Group("Description")
+            ->MicroData("http://schema.org/Product", "name")
 //                ->setMultilang($isoLang)
 //                ->isListed(self::getDefaultLanguage() == $isoLang)
-                ->isRequired()
+            ->isRequired()
             ;
-            //====================================================================//
-            // Long Description
-            $this->fieldsFactory()->Create(SPL_T_TEXT)
-                ->Identifier("description")
-                ->Name("Description")
-                ->Group("Description")
-                ->MicroData("http://schema.org/Article", "articleBody")
+        //====================================================================//
+        // Long Description
+        $this->fieldsFactory()->Create(SPL_T_TEXT)
+            ->Identifier("description")
+            ->Name("Description")
+            ->Group("Description")
+            ->MicroData("http://schema.org/Article", "articleBody")
 //                ->setMultilang($isoLang)
             ;
-            //====================================================================//
-            // Short Description
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("short_description")
-                ->Name("Short Description")
-                ->Group("Description")
-                ->MicroData("http://schema.org/Product", "description")
+        //====================================================================//
+        // Short Description
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("short_description")
+            ->Name("Short Description")
+            ->Group("Description")
+            ->MicroData("http://schema.org/Product", "description")
 //                ->setMultilang($isoLang)
             ;
-            //====================================================================//
-            // Meta Description
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("meta_description")
-                ->Name("SEO"." "."Meta description")
-                ->Group("SEO")
-                ->MicroData("http://schema.org/Article", "headline")
+        //====================================================================//
+        // Meta Description
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("meta_description")
+            ->Name("SEO"." "."Meta description")
+            ->Group("SEO")
+            ->MicroData("http://schema.org/Article", "headline")
 //                ->setMultilang($isoLang)
             ;
-            //====================================================================//
-            // Meta Title
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("meta_title")
-                ->Name("SEO"." "."Meta title")
-                ->Group("SEO")
-                ->MicroData("http://schema.org/Article", "alternateName")
+        //====================================================================//
+        // Meta Title
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("meta_title")
+            ->Name("SEO"." "."Meta title")
+            ->Group("SEO")
+            ->MicroData("http://schema.org/Article", "alternateName")
 //                ->setMultilang($isoLang)
             ;
-            //====================================================================//
-            // Url Path
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("url_key")
-                ->Name("SEO"." "."Friendly URL")
-                ->Group("SEO")
-                ->MicroData("http://schema.org/Product", "urlRewrite")
-                ->AddOption("isLowerCase")
+        //====================================================================//
+        // Url Path
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("url_key")
+            ->Name("SEO"." "."Friendly URL")
+            ->Group("SEO")
+            ->MicroData("http://schema.org/Product", "urlRewrite")
+            ->AddOption("isLowerCase")
 //                ->setMultilang($isoLang)
             ;
 //        }
@@ -108,27 +108,27 @@ trait DescTrait
 //            //====================================================================//
 //            // Decode Multi-lang Field Name
 //            $baseFieldName = self::fieldNameDecode($fieldName, $isoLang);
-            //====================================================================//
-            // READ Fields
-            switch ($fieldName) {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
 //            switch ($baseFieldName) {
-                //====================================================================//
-                // PRODUCT MULTI-LANG CONTENTS
-                //====================================================================//
-                case 'name':
-                case 'description':
-                case 'short_description':
-                case 'meta_title':
-                case 'meta_description':
-                case 'meta_keywords':
-                case 'url_key':
-                    $this->getGeneric($fieldName);
+            //====================================================================//
+            // PRODUCT MULTI-LANG CONTENTS
+            //====================================================================//
+            case 'name':
+            case 'description':
+            case 'short_description':
+            case 'meta_title':
+            case 'meta_description':
+            case 'meta_keywords':
+            case 'url_key':
+                $this->getGeneric($fieldName);
 //                    $this->out[$fieldName] = $this->getMultiLangData($storeId, $baseFieldName);
 
-                    unset($this->in[$key]);
+                unset($this->in[$key]);
 
-                    break;
-            }
+                break;
+        }
 //        }
     }
 
@@ -136,7 +136,7 @@ trait DescTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData      Field Data
+     * @param mixed  $fieldData Field Data
      *
      * @return void
      *
@@ -150,25 +150,25 @@ trait DescTrait
 //            //====================================================================//
 //            // Decode Multi-lang Field Name
 //            $baseFieldName = self::fieldNameDecode($fieldName, $isoLang);
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
             //====================================================================//
-            // WRITE Field
-            switch ($fieldName) {
-                //====================================================================//
-                // PRODUCT MULTI-LANG CONTENTS
-                //====================================================================//
-                case 'name':
-                case 'description':
-                case 'short_description':
-                case 'meta_title':
-                case 'meta_description':
-                case 'meta_keywords':
-                case 'url_key':
-                    $this->setGeneric($fieldName, $fieldData);
+            // PRODUCT MULTI-LANG CONTENTS
+            //====================================================================//
+            case 'name':
+            case 'description':
+            case 'short_description':
+            case 'meta_title':
+            case 'meta_description':
+            case 'meta_keywords':
+            case 'url_key':
+                $this->setGeneric($fieldName, $fieldData);
 
-                    unset($this->in[$fieldName]);
+                unset($this->in[$fieldName]);
 
-                    break;
-            }
+                break;
+        }
 //        }
     }
 }

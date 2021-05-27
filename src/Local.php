@@ -17,18 +17,17 @@ namespace Splash\Local;
 
 use ArrayObject;
 use Exception;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\User\Model\User;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Helpers\MageHelper;
 use Splash\Local\Models\MagentoServicesTrait;
 use Splash\Models\LocalClassInterface;
-use Splash\Local\Helpers\MageHelper;
-use Magento\Backend\Model\Auth\Session;
-use Magento\User\Model\User;
-use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\App\Area;
-use Throwable;
 
 /**
  * Splash PHP Module For Magento 1 - Local Core Class
@@ -64,7 +63,7 @@ class Local implements LocalClassInterface
         $parameters["WsEncryptionKey"] = MageHelper::getStoreConfig('splashsync/core/key');
         //====================================================================//
         // Check If Expert Mode is Active
-        $isExpert =  MageHelper::getStoreConfig('splashsync/core/expert');
+        $isExpert = MageHelper::getStoreConfig('splashsync/core/expert');
         //====================================================================//
         // Server Ws Method
         if ($isExpert) {
@@ -78,11 +77,11 @@ class Local implements LocalClassInterface
                 $parameters["WsHost"] = $serverUrl;
             }
         }
-////
-////        //====================================================================//
-////        // Override Module Parameters with Local User Selected Lang
-////        $parameters["DefaultLanguage"] = Mage::getStoreConfig('splashsync_splash_options/core/lang');
-////
+        ////
+        ////        //====================================================================//
+        ////        // Override Module Parameters with Local User Selected Lang
+        ////        $parameters["DefaultLanguage"] = Mage::getStoreConfig('splashsync_splash_options/core/lang');
+        ////
 //        //====================================================================//
 //        // Override Module Local Name in Logs
 //        $parameters["localname"] = MageHelper::getStoreConfig('general/store_information/name');
@@ -106,8 +105,9 @@ class Local implements LocalClassInterface
      *
      *      This is triggered by global constant SPLASH_SERVER_MODE.
      *
-     * @return bool
      * @throws Exception
+     *
+     * @return bool
      */
     public function includes(): bool
     {
@@ -178,7 +178,8 @@ class Local implements LocalClassInterface
         $response->zip = MageHelper::getStoreConfig('general/store_information/postcode');
         $response->town = MageHelper::getStoreConfig('general/store_information/city');
         $response->country = MageHelper::getStoreConfig('general/store_information/country_id');
-        $response->www = MageHelper::getStoreConfig('web/secure/base_url') ?: MageHelper::getStoreConfig('web/unsecure/base_url');
+        $response->www = MageHelper::getStoreConfig('web/secure/base_url')
+            ?: MageHelper::getStoreConfig('web/unsecure/base_url');
         $response->email = MageHelper::getStoreConfig('trans_email/ident_general/email');
         $response->phone = MageHelper::getStoreConfig('general/store_information/phone');
 
@@ -200,7 +201,8 @@ class Local implements LocalClassInterface
         /** @var ProductMetadataInterface $productMetadata */
         $productMetadata = MageHelper::getModel(ProductMetadataInterface::class);
         $response->servertype = "Magento 2 V".$productMetadata->getVersion();
-        $response->serverurl = MageHelper::getStoreConfig('web/secure/base_url') ?: MageHelper::getStoreConfig('web/unsecure/base_url');
+        $response->serverurl = MageHelper::getStoreConfig('web/secure/base_url')
+            ?: MageHelper::getStoreConfig('web/unsecure/base_url');
 
         //====================================================================//
         // Module Informations
@@ -227,7 +229,7 @@ class Local implements LocalClassInterface
 //
         //====================================================================//
         // Init Parameters Array
-        $parameters = array();
+        return array();
 //
 //        //====================================================================//
 //        // Server Actives Languages List
@@ -267,8 +269,6 @@ class Local implements LocalClassInterface
 //        $parameters["CurrencySymbol"] = Mage::app()->getLocale()->currency($parameters["Currency"])->getSymbol();
 //        $parameters["PriceBase"] = ((bool) Mage::getStoreConfig('tax/calculation/price_includes_tax')) ? "TTC" : "HT";
 //        $parameters["PricesPrecision"] = 3;
-
-        return $parameters;
     }
 
     /**
@@ -279,7 +279,6 @@ class Local implements LocalClassInterface
         switch ($name) {
             case "Main":
                 return array();
-
 //            case "ProductVATIncluded":
 //                $this->loadLocalUser();
 //                Mage::getConfig()->saveConfig('tax/calculation/price_includes_tax', '1');
@@ -304,9 +303,9 @@ class Local implements LocalClassInterface
             case "List":
                 return array(
                     "Main"
-//                    "ProductVATIncluded" ,
-//                    "ProductVATExcluded" ,
-//                    "Multilang"
+                    //                    "ProductVATIncluded" ,
+                    //                    "ProductVATExcluded" ,
+                    //                    "Multilang"
                 );
         }
 
@@ -327,7 +326,7 @@ class Local implements LocalClassInterface
     public function loadLocalUser(): bool
     {
         static $session;
-        if(!isset($session)) {
+        if (!isset($session)) {
             /** @var Session $session */
             $session = MageHelper::getModel(Session::class);
         }

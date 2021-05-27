@@ -1,12 +1,24 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product\Variants;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
-use Splash\Local\Helpers\MageHelper;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Splash\Client\Splash;
+use Splash\Local\Helpers\MageHelper;
 
 /**
  *  Core Functions to Access Products Variants Informations
@@ -21,7 +33,8 @@ trait CoreTrait
     /**
      * Identify Parent Product
      *
-     * @param int|null $productId
+     * @param null|int $productId
+     *
      * @return null|Product
      */
     protected function getParentProduct(?int $productId): ?Product
@@ -52,7 +65,7 @@ trait CoreTrait
     /**
      * Get Configurable Products Children Ids
      *
-     * @param int|null $productId
+     * @param null|int $productId
      *
      * @return array
      */
@@ -75,7 +88,8 @@ trait CoreTrait
      *
      * @return Configurable
      */
-    protected function getConfigurableManager(): Configurable {
+    protected function getConfigurableManager(): Configurable
+    {
         if (!isset($this->configurable)) {
             /** @var Configurable $configurable */
             $configurable = MageHelper::getModel(Configurable::class);
@@ -84,6 +98,4 @@ trait CoreTrait
 
         return $this->configurable;
     }
-
-
 }

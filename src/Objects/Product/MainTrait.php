@@ -1,13 +1,22 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Local\Helpers\MageHelper;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
-use Magento\CatalogInventory\Model\Stock\Item;
 use Splash\Components\UnitConverter as Units;
-use Splash\Client\Splash;
+use Splash\Local\Helpers\MageHelper;
 
 /**
  * Product Main Fields
@@ -91,7 +100,6 @@ trait MainTrait
                 );
 
                 break;
-
             case 'ts_dimensions_length':
             case 'ts_dimensions_width':
             case 'ts_dimensions_height':
@@ -131,13 +139,12 @@ trait MainTrait
                     (float) $data,
                     static::$mageWeight[self::getStoreUnit()] ?: Units::MASS_KG
                 );
-                if( abs($new - $current) < 1E-3) {
+                if (abs($new - $current) < 1E-3) {
                     break;
                 }
                 $this->setGeneric($fieldName, $new);
 
                 break;
-
             case 'ts_dimensions_length':
             case 'ts_dimensions_width':
             case 'ts_dimensions_height':
@@ -148,19 +155,17 @@ trait MainTrait
                     (float) $data,
                     static::$mageDims[self::getStoreUnit()] ?: Units::LENGTH_CM
                 );
-                if( abs($new - $current) < 1E-3) {
+                if (abs($new - $current) < 1E-3) {
                     break;
                 }
                 $this->setGeneric($fieldName, $new);
 
                 break;
-
             default:
                 return;
         }
         unset($this->in[$fieldName]);
     }
-
 
     /**
      * Get Store default Unit

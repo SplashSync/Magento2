@@ -1,46 +1,60 @@
 <?php
+
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace SplashSync\Magento2\Controller\Ws;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\ResultFactory;
 use Splash\Client\Splash;
 use Splash\Server\SplashServer;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\CsrfAwareActionInterface;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
 
 /**
  * Splash Public Soap Controller
  */
-class Soap extends Action implements HttpPostActionInterface, HttpGetActionInterface, CsrfAwareActionInterface {
-
+class Soap extends Action implements HttpPostActionInterface, HttpGetActionInterface, CsrfAwareActionInterface
+{
     /**
-     * @var RawFactory
+     * @var ResultFactory
      */
     protected $factory;
-
 
     /**
      * Soap Action constructor.
      *
-     * @param Context $context
-     * @param RawFactory $resultRawFactory
+     * @param Context       $context
+     * @param ResultFactory $resultFactory
      */
-    public function __construct(Context $context, RawFactory $resultRawFactory)
+    public function __construct(Context $context, ResultFactory $resultFactory)
     {
-        $this->factory    = $resultRawFactory;
         parent::__construct($context);
+        $this->factory = $resultFactory;
     }
 
     /**
      * Handle Splash Soap Request
      *
-     * @return void
+     * @return Raw
      */
-    public function execute()
+    public function execute(): Raw
     {
         //====================================================================//
         // Setup Php Specific Settings
@@ -48,7 +62,8 @@ class Soap extends Action implements HttpPostActionInterface, HttpGetActionInter
         error_reporting(E_ERROR);
         //====================================================================//
         // Create Raw Response
-        $result = $this->factory->create();
+        /** @var Raw $result */
+        $result = $this->factory->create(ResultFactory::TYPE_RAW);
         //====================================================================//
         // Detect SOAP requests send by Splash Server
         $userAgent = Splash::input("HTTP_USER_AGENT");
@@ -57,7 +72,7 @@ class Soap extends Action implements HttpPostActionInterface, HttpGetActionInter
         }
         //====================================================================//
         //   Declare WebService Available Functions
-        $corePath = dirname((new \ReflectionClass(SplashServer::class))->getFileName(), 2);
+        $corePath = dirname((string) (new \ReflectionClass(SplashServer::class))->getFileName(), 2);
         require_once($corePath."/inc/server.inc.php");
         Splash::log()->deb("Splash Started In Server Mode");
         //====================================================================//
@@ -78,14 +93,18 @@ class Soap extends Action implements HttpPostActionInterface, HttpGetActionInter
         //====================================================================//
         // Process methods & Return the results.
         Splash::com()->handle();
+
+        return $result;
     }
 
     /**
      * @param RequestInterface $request
      *
-     * @return InvalidRequestException|null
+     * @return null|InvalidRequestException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function createCsrfValidationException(RequestInterface $request): ? InvalidRequestException
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
     {
         return null;
     }
@@ -93,7 +112,9 @@ class Soap extends Action implements HttpPostActionInterface, HttpGetActionInter
     /**
      * @param RequestInterface $request
      *
-     * @return bool|null
+     * @return null|bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validateForCsrf(RequestInterface $request): ?bool
     {

@@ -15,20 +15,15 @@
 
 namespace SplashSync\Magento2\Observer;
 
+use Exception;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Event\Observer;
 use Splash\Client\Splash;
 use Splash\Components\Logger;
-use Splash\Local\Local;
-use Magento\Framework\Event\Observer;
-use Magento\Catalog\Model\Product;
 use Splash\Local\Helpers\MageHelper;
 
-// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
-// phpcs:disable Squiz.Classes.ValidClassName
-
 /**
- * Splash PHP Module For Magento 1 - Data Observer
- *
- * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ * Splash PHP Module For Magento 2 - Data Observer
  */
 class AbstractObserver
 {
@@ -43,11 +38,11 @@ class AbstractObserver
      * @var class-string[]
      */
     private static $resourceFilter = array(
-//        "customer/customer",
-//        "customer/address",
+        //        "customer/customer",
+        //        "customer/address",
         Product::class,
-//        "sales/order",
-//        "sales/order_invoice"
+        //        "sales/order",
+        //        "sales/order_invoice"
     );
 
     /**
@@ -56,11 +51,11 @@ class AbstractObserver
      * @var array<class-string, string>
      */
     private static $resourceTypes = array(
-        "customer/customer" => "ThirdParty",
-        "customer/address" => "Address",
+        //        "customer/customer" => "ThirdParty",
+        //        "customer/address" => "Address",
         Product::class => "Product",
-        "sales/order" => "Order",
-        "sales/order_invoice" => "Invoice"
+        //        "sales/order" => "Order",
+        //        "sales/order_invoice" => "Invoice"
     );
 
     /**
@@ -69,60 +64,12 @@ class AbstractObserver
      * @var array<class-string, string>
      */
     private static $resourceNames = array(
-        "customer/customer" => "Customer",
-        "customer/address" => "Customer Address",
+        //        "customer/customer" => "Customer",
+        //        "customer/address" => "Customer Address",
         Product::class => "Product",
-        "sales/order" => "Customer Order",
-        "sales/order_invoice" => "Customer Invoice"
+        //        "sales/order" => "Customer Order",
+        //        "sales/order_invoice" => "Customer Invoice"
     );
-
-    /**
-     * Object Change Delete Commit After Event = Execute Splash Commits for Delete Actions
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function onDeleteCommitAfter(Varien_Event_Observer $observer): void
-    {
-        //====================================================================//
-        // Filter & Get Object From Event Class
-        $object = $this->filterEvent($observer);
-        if (is_null($object)) {
-            return;
-        }
-        //====================================================================//
-        // Init Splash Module
-        $this->ensureInit();
-        //====================================================================//
-        // Translate Object Type & Comment
-        $objectType = $this->resourceTypes[$object->getResourceName()];
-        $comment = $this->resourceNames[$object->getResourceName()];
-        //====================================================================//
-        // Do Generic Change Commit
-        $this->commitChanges($objectType, SPL_A_DELETE, $object->getEntityId(), $comment);
-    }
-
-//    /**
-//     * Ensure Splash Libraries are Loaded
-//     */
-//    private function ensureInit(): void
-//    {
-//        //====================================================================//
-//        // Splash Module Autoload Locations
-//        $autoloadLocations = array(
-//            dirname(dirname(__FILE__)).'/vendor/autoload.php',
-//            BP.'/app/code/local/SplashSync/Splash/vendor/autoload.php',
-//        );
-//        //====================================================================//
-//        // Load Splash Module
-//        foreach ($autoloadLocations as $autoload) {
-//            if (is_file($autoload)) {
-//                require_once($autoload);
-//                Splash::Core();
-//
-//                return;
-//            }
-//        }
-//    }
 
     /**
      * Ensure Event is in Required Scope (Object action, Resources Filter)
@@ -135,7 +82,7 @@ class AbstractObserver
     {
         //====================================================================//
         // Get Object From Event Class
-        $object = $observer->getEvent()->getObject();
+        $object = $observer->getEvent()->getData("object");
         if (is_null($object)) {
             return null;
         }
@@ -143,6 +90,7 @@ class AbstractObserver
         // Filter Object Type
         foreach (self::$resourceFilter as $resourceClass) {
             if (is_subclass_of($object, $resourceClass)) {
+                /** @var Product $object */
                 return $object;
             }
         }
@@ -214,42 +162,40 @@ class AbstractObserver
         }
         //====================================================================//
         // Commit Action on remotes nodes (Master & Slaves)
-        $result = Splash::commit($objectType, $local, $action, $user, $comment);
+        return Splash::commit($objectType, $local, $action, $user, $comment);
         //====================================================================//
         // Post Splash Messages
 //        $this->importLog(Splash::log());
-
-        return $result;
     }
 
-    /**
-     * Import Splash Logs to User Session
-     *
-     * @param Logger $log
-     */
-    private function importLog($log): void
-    {
-        //====================================================================//
-        // Import Errors
-        if (isset($log->err) && !empty($log->err)) {
-            $this->importMessages($log->err, "addError");
-        }
-        //====================================================================//
-        // Import Warnings
-        if (isset($log->war) && !empty($log->war)) {
-            $this->importMessages($log->war, "addWarning");
-        }
-        //====================================================================//
-        // Import Messages
-        if (isset($log->msg) && !empty($log->msg)) {
-            $this->importMessages($log->msg, "addSuccess");
-        }
-        //====================================================================//
-        // Import Debug
-        if (isset($log->deb) && !empty($log->deb)) {
-            $this->importMessages($log->deb, "addSuccess");
-        }
-    }
+//    /**
+//     * Import Splash Logs to User Session
+//     *
+//     * @param Logger $log
+//     */
+//    private function importLog($log): void
+//    {
+//        //====================================================================//
+//        // Import Errors
+//        if (isset($log->err) && !empty($log->err)) {
+//            $this->importMessages($log->err, "addError");
+//        }
+//        //====================================================================//
+//        // Import Warnings
+//        if (isset($log->war) && !empty($log->war)) {
+//            $this->importMessages($log->war, "addWarning");
+//        }
+//        //====================================================================//
+//        // Import Messages
+//        if (isset($log->msg) && !empty($log->msg)) {
+//            $this->importMessages($log->msg, "addSuccess");
+//        }
+//        //====================================================================//
+//        // Import Debug
+//        if (isset($log->deb) && !empty($log->deb)) {
+//            $this->importMessages($log->deb, "addSuccess");
+//        }
+//    }
 
 //    /**
 //     * @param array  $messagesArray

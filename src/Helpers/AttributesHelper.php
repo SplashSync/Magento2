@@ -1,12 +1,24 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Helpers;
 
 use Exception;
+use Magento\Eav\Model\Entity;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Eav\Model\Entity\Attribute\Option;
-
+use Magento\Eav\Setup\EavSetup;
 use Splash\Client\Splash;
 
 /**
@@ -17,17 +29,16 @@ class AttributesHelper
     /**
      * Get Attribute Label from Source Value
      *
-     * @param Attribute $attribute
-     * @param float|int|array|string $value
+     * @param Attribute              $attribute
+     * @param array|float|int|string $value
      *
-     * @return string|null
+     * @return null|string
      */
     public static function getLabelFromValue(Attribute $attribute, $value): ?string
     {
         //====================================================================//
         // Identify Final Value from Attribute Source
-        /** @var Option $option */
-        foreach ($attribute->getOptions() as $option) {
+        foreach ($attribute->getOptions() ?: array() as $option) {
             if ($option->getValue() == $value) {
                 return $option->getLabel();
             }
@@ -40,10 +51,10 @@ class AttributesHelper
     /**
      * Get Attribute Value form Source Label
      *
-     * @param Attribute $attribute
-     * @param float|int|array|string $value
+     * @param Attribute              $attribute
+     * @param array|float|int|string $value
      *
-     * @return string|null
+     * @return null|string
      */
     public static function getValueFromLabel(Attribute $attribute, $value): ?string
     {
@@ -54,8 +65,7 @@ class AttributesHelper
         }
         //====================================================================//
         // Identify Attribute Value from Options
-        /** @var Option $option */
-        foreach ( $attribute->getOptions() as $option) {
+        foreach ($attribute->getOptions() ?: array() as $option) {
             if ($option->getLabel() == $value) {
                 return $option->getValue();
             }
@@ -63,8 +73,6 @@ class AttributesHelper
 
         return null;
     }
-
-
 
     /**
      * Get Attribute Options for Splash Choices
@@ -82,7 +90,7 @@ class AttributesHelper
         //====================================================================//
         // Walk on Attribute Options
         foreach ($attribute->getOptions() as $option) {
-            if (is_scalar($option->getValue()) && is_scalar($option->getLabel()) && !empty($option->getValue())) {
+            if (is_scalar($option->getLabel()) && !empty($option->getValue())) {
                 $choices[$option->getLabel()] = $option->getLabel();
             }
         }
@@ -94,11 +102,11 @@ class AttributesHelper
      * Create a Product Configurable Attribute with Given Options
      *
      * @param string $name
-     * @param array $options
-     *
-     * @return mixed
+     * @param array  $options
      *
      * @throws Exception
+     *
+     * @return null|Attribute
      */
     public static function addConfigurableAttribute(string $name, array $options): ?Attribute
     {
@@ -112,7 +120,7 @@ class AttributesHelper
         //====================================================================//
         // Connect to Attributes Factory
         /** @var Attribute $attributeModel */
-        $attributeModel = MageHelper::getModel("Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory")->create();
+        $attributeModel = MageHelper::createModel(Attribute::class);
         //====================================================================//
         // Prepare Default Data
         $attributeData = array(
@@ -129,23 +137,22 @@ class AttributesHelper
         $attributeModel->addData(array_replace_recursive($attributeData, $options));
         //====================================================================//
         // Setup Attribute Entity Type Id
-        $entityTypeID = MageHelper::getModel('Magento\Eav\Model\Entity')
-            ->setType('catalog_product')
-            ->getTypeId();
+        /** @var Entity $entityModel */
+        $entityModel = MageHelper::getModel(Entity::class);
+        $entityTypeID = $entityModel->setType('catalog_product')->getTypeId();
         $attributeModel->setEntityTypeId($entityTypeID);
 
-        return $attributeModel->save() ?: null;
+        return $attributeModel->save();
     }
 
     /**
      * Add Option Value Attribute with Given Options
      *
-     * @param Attribute $attribute
-     * @param string $value
-     * @param string|null $label
+     * @param Attribute   $attribute
+     * @param string      $value
+     * @param null|string $label
      *
-     * @return mixed
-     *
+     * @return bool
      */
     public static function addAttributeOption(Attribute $attribute, string $value, ?string $label): bool
     {
@@ -156,7 +163,8 @@ class AttributesHelper
         }
         //====================================================================//
         // Connect to Eav Setup
-        $eavSetup = MageHelper::getModel('Magento\Eav\Setup\EavSetupFactory')->create();
+        /** @var EavSetup $eavSetup */
+        $eavSetup = MageHelper::createModel(EavSetup::class);
         //====================================================================//
         // Add Option to Attribute
         try {

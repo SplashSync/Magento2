@@ -1,19 +1,28 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Helpers;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Store;
-use Magento\Directory\Model\Currency;
-
-use Splash\Client\Splash;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Directory\Model\Currency;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Model\User;
-use Magento\Catalog\Model\AbstractModel;
 
 /**
  * Access to Magento 2 Services
@@ -49,8 +58,6 @@ trait MageHelper
      * @var Currency
      */
     private static $currency;
-
-
 
     /**
      * Get Magento Model
@@ -91,7 +98,7 @@ trait MageHelper
             self::$scopeConfig = self::getObjectManager()->get(ScopeConfigInterface::class);
         }
 
-        return self::$scopeConfig->getValue($key,ScopeInterface::SCOPE_STORE);
+        return self::$scopeConfig->getValue($key, ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -151,9 +158,6 @@ trait MageHelper
 
         return self::$currency;
     }
-
-
-
 
     /**
      * Get Magento Object Manager
