@@ -24,7 +24,7 @@ if (!defined('MAGE_ROOT')) {
 require_once MAGE_ROOT.'/app/autoload.php';
 
 if (!defined('TESTS_TEMP_DIR')) {
-    define('TESTS_TEMP_DIR', dirname(__DIR__).'/tmp');
+    define('TESTS_TEMP_DIR', '/tmp');
 }
 
 require_once __DIR__.'/autoload.php';

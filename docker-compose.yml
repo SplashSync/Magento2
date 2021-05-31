@@ -43,9 +43,9 @@ services:
         depends_on:
             - mysql
         volumes:
-            - ./:/var/www/module:ro
-            - /mnt/data/WebDesign/GitHub/Splash/Php-Core:/var/www/phpcore:ro
-        command: sh /var/www/module/docker/magento/docker-entrypoint.sh
+            - ./:/builds/SplashSync/Magento2:ro
+            # - /mnt/data/WebDesign/GitHub/Splash/Php-Core:/var/www/phpcore:ro
+        command: sh /builds/SplashSync/Magento2/docker/magento/docker-entrypoint.sh
         env_file:
             - docker/magento/env
         networks:

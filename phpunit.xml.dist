@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+    xmlns:xsi                       =   "http://www.w3.org/2001/XMLSchema-instance"
+    backupGlobals                   =   "false"
+    backupStaticAttributes          =   "false"
+    colors                          =   "true"
+    convertErrorsToExceptions       =   "true"
+    convertNoticesToExceptions      =   "true"
+    convertWarningsToExceptions     =   "true"
+    processIsolation                =   "false"
+    stopOnFailure                   =   "true"
+    bootstrap                       =   "./tests/framework/bootstrap.php"
+    verbose                         =   "true"
+    timeoutForLargeTests            =   "120"
+    cacheResult                     =   "false"
+>
+
+    <testsuites>
+        <testsuite name="Core">
+            <directory>/var/www/phpcore/Tests</directory>
+            <directory>vendor/splash/phpcore/Tests</directory>
+        </testsuite>
+        <testsuite name="Local">
+            <directory>tests</directory>
+            <directory>vendor/splash/magento2/tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <server name="SERVER_NAME" value="http://latest.magento2.local"/>
+        <const  name="SPLASH_DEBUG" value="true"/>
+        <const  name="MAGE_ROOT" value="/var/www/html"/>
+        <server name="SPLASH_TRAVIS" value="true"/>
+    </php>
+
+</phpunit>

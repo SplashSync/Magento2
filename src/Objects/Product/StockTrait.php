@@ -15,9 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Magento\CatalogInventory\Model\Stock\Item;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
-use Splash\Local\Helpers\MageHelper;
+use Splash\Local\Helpers\MsiStocksHelper;
 
 /**
  * Product Stock Fields
@@ -33,7 +31,7 @@ trait StockTrait
         // Stock Reel
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier("quantity_and_stock_status")
-            ->name("Stock")
+            ->name("[Default] Stock")
             ->microData("http://schema.org/Offer", "inventoryLevel")
         ;
         //====================================================================//
@@ -44,6 +42,22 @@ trait StockTrait
             ->microData("http://schema.org/ItemAvailability", "OutOfStock")
             ->isReadOnly()
         ;
+    }
+
+    /**
+     * Build Fields using FieldFactory
+     */
+    protected function buildStockSourcesFields(): void
+    {
+        foreach (MsiStocksHelper::getAvailableSourcesList() as $srcCode => $srcName) {
+            //====================================================================//
+            // Stock Reel
+            $this->fieldsFactory()->create(SPL_T_INT)
+                ->identifier("src_stock_".$srcCode)
+                ->name("[".$srcName."] Stock")
+                ->microData("http://schema.org/Offer", "inventoryLevel".ucfirst($srcCode))
+            ;
+        }
     }
 
     /**
@@ -60,14 +74,11 @@ trait StockTrait
         // READ Fields
         switch ($fieldName) {
             case 'quantity_and_stock_status':
-                // $this->out[$fieldName] = $this->object->getExtensionAttributes()->getStockItem()->getQty();
-                $stockItem = self::getStockItem($this->object->getEntityId());
-                $this->out[$fieldName] = $stockItem ? (int) $stockItem->getQty() : 0;
+                $this->out[$fieldName] = MsiStocksHelper::getStockLevel($this->object->getEntityId());
 
                 break;
             case 'is_in_stock':
-                $stockItem = self::getStockItem($this->object->getEntityId());
-                $this->out[$fieldName] = !$stockItem || !$stockItem->getIsInStock();
+                $this->out[$fieldName] = !empty(MsiStocksHelper::getStockLevel($this->object->getEntityId()));
 
                 break;
             default:
@@ -75,6 +86,24 @@ trait StockTrait
         }
 
         unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    protected function getStockSourcesFields(string $key, string $fieldName): void
+    {
+        foreach (array_keys(MsiStocksHelper::getAvailableSourcesList()) as $sourceCode) {
+            if ($fieldName == ("src_stock_".$sourceCode)) {
+                $this->out[$fieldName] = MsiStocksHelper::getSourceLevel($sourceCode, $this->object->getSku());
+                unset($this->in[$key]);
+            }
+        }
     }
 
     /**
@@ -91,8 +120,8 @@ trait StockTrait
         // WRITE Field
         switch ($fieldName) {
             case 'quantity_and_stock_status':
-                $stockItem = self::getStockItem($this->object->getEntityId());
-                if ($stockItem && ($stockItem->getQty() == $data)) {
+                $stockLevel = MsiStocksHelper::getStockLevel($this->object->getEntityId());
+                if ($stockLevel == $data) {
                     break;
                 }
                 $this->object->setQuantityAndStockStatus(array(
@@ -109,23 +138,24 @@ trait StockTrait
     }
 
     /**
-     * Read Product Stock Item
+     * Write Given Fields
      *
-     * @param int $productId
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $data      Field Data
      *
-     * @return null|Item
+     * @return void
      */
-    protected static function getStockItem(int $productId): ?Item
+    protected function setStockSourcesFields(string $fieldName, $data): void
     {
-        /** @var null|StockItemRepository $registry */
-        static $registry;
+        foreach (array_keys(MsiStocksHelper::getAvailableSourcesList()) as $sourceCode) {
+            if ($fieldName == ("src_stock_".$sourceCode)) {
+                $sourceLevel = MsiStocksHelper::getSourceLevel($sourceCode, $this->object->getSku());
+                if ($sourceLevel != $data) {
+                    MsiStocksHelper::setSourceLevel($sourceCode, $this->object->getSku(), (int) $data);
+                }
 
-        if (!$registry) {
-            /** @var StockItemRepository $registry */
-            $registry = MageHelper::getModel(StockItemRepository::class);
+                unset($this->in[$fieldName]);
+            }
         }
-
-        /** @phpstan-ignore-next-line */
-        return $registry->get($productId) ?: null;
     }
 }

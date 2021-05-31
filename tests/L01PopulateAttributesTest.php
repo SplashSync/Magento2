@@ -36,25 +36,26 @@ class L01PopulateAttributesTest extends ObjectsCase
      *
      * @return void
      */
-    public function testProductVariantAttributes(string $name, array $options)
+    public function testProductVariantAddAttributes(string $name, array $options, array $values)
     {
-//        //====================================================================//
-//        // Load Product Attributes List
-//        $initAttribute = MageHelper::getModel(MageProduct::class)->getResource()->getAttribute($name);
-//        //====================================================================//
-//        // Debug => Delete Attribute
-//        if ($initAttribute) {
-//            $initAttribute->delete();
-//        }
-        //====================================================================//
-        // Load Product Attributes List
         /** @var MageProduct $model */
         $model = MageHelper::getModel(MageProduct::class);
+        //====================================================================//
+        // Debug => Delete Attribute
+        if (!in_array($name, array("VariantA", "VariantB"), true)) {
+            $initAttribute = $model->getAttribute($name);
+            if ($initAttribute) {
+                $initAttribute->delete();
+            }
+        }
+        //====================================================================//
+        // Load Product Attribute
         $attribute = $model->getAttribute($name);
         //====================================================================//
         // Create Configurable Attribute
         if (!$attribute) {
-            $attribute = AttributesHelper::addConfigurableAttribute($name, array());
+            AttributesHelper::addConfigurableAttribute($name, array("option" => $options));
+            $attribute = $model->getAttribute($name);
         }
         $this->assertInstanceOf(Attribute::class, $attribute);
         //====================================================================//
@@ -65,7 +66,7 @@ class L01PopulateAttributesTest extends ObjectsCase
         $this->assertNotEmpty($attribute->getOptions());
         //====================================================================//
         // Add Attribute Options
-        foreach ($options as $value => $label) {
+        foreach ($values as $value => $label) {
             //====================================================================//
             // Check if Option Exists
             if (AttributesHelper::getValueFromLabel($attribute, $label)) {
@@ -77,9 +78,8 @@ class L01PopulateAttributesTest extends ObjectsCase
         }
         //====================================================================//
         // Verify Attribute
-        $upAttribute = $model->getAttribute($name);
-        $this->assertInstanceOf(Attribute::class, $upAttribute);
-        $this->assertEquals(count($options) + 1, count((array) $upAttribute->getOptions()));
+        $this->assertInstanceOf(Attribute::class, $attribute);
+        $this->assertEquals(count($values) + 1, count((array) $attribute->getOptions()));
     }
 
     /**
@@ -91,15 +91,25 @@ class L01PopulateAttributesTest extends ObjectsCase
     {
         //====================================================================//
         // Build variant Attribute Options List
-        $options = array();
+        // Build variant Attribute Values List
+        $values = array();
+        $options = array(
+            "order" => array(),
+            "value" => array(),
+        );
         for ($i = 1; $i < 20; $i++) {
-            $options["option_".$i] = "Value ".$i;
+            $key = "option_".$i;
+            $value = "Value ".$i;
+            $values[$key] = $value;
+            $options["order"][$key] = $i;
+            $options["value"][$key] = array(0 => $value, 1 => $value);
         }
         //====================================================================//
         // Build Variant Attributes List
         return array(
-            "VariantA" => array("VariantA", $options),
-            "VariantB" => array("VariantB", $options),
+            "VariantA" => array("VariantA", $options, $values),
+            "VariantB" => array("VariantB", $options, $values),
+            "VariantX" => array("VariantX", $options, $values),
         );
     }
 }

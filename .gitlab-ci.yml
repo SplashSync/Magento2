@@ -60,9 +60,17 @@ core_tests:
     ################################################################################
     # Install & Configure Environment
     before_script:
-      # Init Docker
-      - echo "Install Magento"
+      ################################################################################
+      - echo "\033[32m BEFORE --> Install Magento 2          \033[0m"
       - install-magento
+      ################################################################################
+      - echo "\033[32m BEFORE --> Install Splash             \033[0m"
+      - cat /builds/SplashSync/Magento2/scripts/install-phpunit.sh | bash
+      - cat /builds/SplashSync/Magento2/scripts/install-dev-module.sh | bash
+      ################################################################################
+      - echo "\033[32m BEFORE --> Setup Magento 2            \033[0m"
+      - cat /builds/SplashSync/Magento2/scripts/setup-magento.sh | bash
+      - cat /builds/SplashSync/Magento2/scripts/compile-magento.sh | bash
     ################################################################################
     # Run Test Script
     script:

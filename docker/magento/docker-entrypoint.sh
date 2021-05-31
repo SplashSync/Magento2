@@ -20,14 +20,14 @@ set -e
 
 ################################################################################
 # Ensure Splash Vendor DIR doesn't exists
-if [ -d /var/www/module/vendor ]; then
+if [ -d /builds/SplashSync/Magento2/vendor ]; then
     echo "Module Vendor MUST be Deleted before Docker Start"
     exit 1
 fi
 
 ################################################################################
 # Wait for Mysql Server Wakeup
-sh /var/www/module/scripts/wait-for-mysql.sh
+sh /builds/SplashSync/Magento2/scripts/wait-for-mysql.sh
 
 ################################################################################
 # First Time => INSTALL MAGENTO + SAMPLE DATA
@@ -43,16 +43,16 @@ su www-data
 
 ################################################################################
 # Install Phpunit
-sh /var/www/module/scripts/install-phpunit.sh
+sh /builds/SplashSync/Magento2/scripts/install-phpunit.sh
 ################################################################################
 # Install SplashSync Module
-sh /var/www/module/scripts/install-dev-module.sh
+sh /builds/SplashSync/Magento2/scripts/install-dev-module.sh
 ################################################################################
 # Configure Magento for Development & Tests
-sh /var/www/module/scripts/setup-magento.sh
+sh /builds/SplashSync/Magento2/scripts/setup-magento.sh
 ################################################################################
 # Compile Magento
-sh /var/www/module/scripts/compile-magento.sh
+sh /builds/SplashSync/Magento2/scripts/compile-magento.sh
 
 ################################################################################
 echo "Init Magento"

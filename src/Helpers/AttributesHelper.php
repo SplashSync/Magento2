@@ -154,7 +154,7 @@ class AttributesHelper
      *
      * @return bool
      */
-    public static function addAttributeOption(Attribute $attribute, string $value, ?string $label): bool
+    public static function addAttributeOption(Attribute &$attribute, string $value, ?string $label): bool
     {
         //====================================================================//
         // Only in Debug Mode (PhpUnit)
