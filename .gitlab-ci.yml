@@ -78,6 +78,12 @@ core_tests:
     script:
       - cd /var/www/html
       - php bin/magento
+      ################################################################################
+      - echo "\033[32m UNIY TESTS --> Init & Local             \033[0m"
+      - php /usr/bin/phpunit -c vendor/splash/magento2/phpunit.xml.dist --testsuite=Local
+      ################################################################################
+      - echo "\033[32m UNIY TESTS --> Full                     \033[0m"
+      - php /usr/bin/phpunit -c vendor/splash/magento2/phpunit.xml.dist
     ################################################################################
     # Run After Script
 #    after_script:
