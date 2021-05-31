@@ -13,6 +13,8 @@
  *  file that was distributed with this source code.
  */
 
+// phpcs:disable
+
 namespace SplashSync\Magento2\Block\Adminhtml\System\Config;
 
 use Magento\Backend\Block\Template\Context;
@@ -25,9 +27,6 @@ use Splash\Client\Splash;
  */
 class TestConnexion extends Field
 {
-    /** @var string */
-    protected $_template = 'SplashSync_Magento2::testButton.phtml';
-
     /**
      * TestConnexion constructor.
      *
@@ -37,6 +36,7 @@ class TestConnexion extends Field
     public function __construct(Context $context, array $data = array())
     {
         parent::__construct($context, $data);
+        $this->_template = 'SplashSync_Magento2::testButton.phtml';
     }
 
     /**
@@ -46,18 +46,22 @@ class TestConnexion extends Field
      */
     public function render(AbstractElement $element)
     {
+        /** @phpstan-ignore-next-line */
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
 
         return parent::render($element);
     }
 
     /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     *
      * @return string
      */
     public function getButtonHtml()
     {
         $uri = '/splash/ws/test?node='.Splash::configuration()->WsIdentifier;
 
+        /** @phpstan-ignore-next-line */
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
@@ -75,6 +79,9 @@ class TestConnexion extends Field
      * @param AbstractElement $element
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getElementHtml(AbstractElement $element)
     {

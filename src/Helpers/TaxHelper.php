@@ -33,7 +33,7 @@ class TaxHelper
         $taxRequest = $taxCalculation->getRateRequest(null, null, null, MageHelper::getStore());
 
         return (float)  $taxCalculation->getRate(
-        /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
             $taxRequest->setProductClassId($taxClassId)
         );
     }

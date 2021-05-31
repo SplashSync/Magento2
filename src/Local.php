@@ -26,7 +26,6 @@ use Magento\Framework\Module\ModuleListInterface;
 use Magento\User\Model\User;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Helpers\MageHelper;
-use Splash\Local\Models\MagentoServicesTrait;
 use Splash\Models\LocalClassInterface;
 
 /**
@@ -36,8 +35,6 @@ use Splash\Models\LocalClassInterface;
  */
 class Local implements LocalClassInterface
 {
-    use MagentoServicesTrait;
-
     /**
      * Object Commit Mode
      *
