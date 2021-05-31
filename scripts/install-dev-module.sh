@@ -17,6 +17,7 @@
 ################################################################################
 
 set -e
+cd /var/www/html
 
 if [ -d vendor/splash/magento2 ]; then
     echo "Composer Module Already Installed"
