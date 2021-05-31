@@ -35,6 +35,7 @@ class EavHelper
         "varchar" => SPL_T_VARCHAR,
         "select" => SPL_T_VARCHAR,
         "text" => SPL_T_TEXT,
+        "date" => SPL_T_DATE,
         "datetime" => SPL_T_DATETIME,
         "media_image" => SPL_T_IMG,
     );
@@ -106,12 +107,14 @@ class EavHelper
     /**
      * Get Splash Field Value
      *
-     * @param Attribute        $attribute
-     * @param float|int|string $value
+     * @param Attribute                  $attribute
+     * @param null|bool|float|int|string $value
      *
      * @throws Exception
      *
      * @return null|array|bool|float|int|string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function toSplashValue(Attribute $attribute, $value)
     {
@@ -132,6 +135,8 @@ class EavHelper
             case SPL_T_VARCHAR:
             case SPL_T_TEXT:
                 return $value;
+            case SPL_T_DATE:
+                return DateHelper::toSplashDate((string) $value);
             case SPL_T_DATETIME:
                 return DateHelper::toSplash((string) $value);
             case SPL_T_IMG:
@@ -150,6 +155,8 @@ class EavHelper
      * @throws Exception
      *
      * @return null|float|int|string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function toMageValue(Attribute $attribute, $value)
     {
@@ -170,6 +177,7 @@ class EavHelper
             case SPL_T_VARCHAR:
             case SPL_T_TEXT:
                 return (string) $value;
+            case SPL_T_DATE:
             case SPL_T_DATETIME:
                 return DateHelper::toMage((string) $value);
         }

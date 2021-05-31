@@ -19,7 +19,7 @@
 
     <testsuites>
         <testsuite name="Core">
-            <directory>/var/www/phpcore/Tests</directory>
+<!--            <directory>/var/www/phpcore/Tests</directory>-->
             <directory>vendor/splash/phpcore/Tests</directory>
         </testsuite>
         <testsuite name="Local">
@@ -39,6 +39,14 @@
         <const  name="SPLASH_DEBUG" value="true"/>
         <const  name="MAGE_ROOT" value="/var/www/html"/>
         <server name="SPLASH_TRAVIS" value="true"/>
+
+        <!-- Only Test Specified Types -->
+        <!--<const  name="SPLASH_TYPES"     value="Address" />-->
+        <!--<const  name="SPLASH_TYPES"     value="ThirdParty" />-->
+        <!--<const  name="SPLASH_TYPES"     value="Product" />-->
+        <!--<const  name="SPLASH_TYPES"     value="Order" />-->
+        <!--<const  name="SPLASH_TYPES"     value="Invoice" />-->
+
     </php>
 
 </phpunit>

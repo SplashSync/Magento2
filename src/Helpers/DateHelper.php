@@ -42,6 +42,24 @@ class DateHelper
     }
 
     /**
+     * Convert Magento DateTime to Splash
+     *
+     * @param null|string $mageDateTime
+     *
+     * @throws Exception
+     *
+     * @return null|string
+     */
+    public static function toSplashDate(?string $mageDateTime): ?string
+    {
+        if (empty($mageDateTime)) {
+            return null;
+        }
+
+        return (new \DateTime($mageDateTime))->format(SPL_T_DATECAST);
+    }
+
+    /**
      * Convert Splash DateTime to Magento DateTime
      *
      * @param null|string $mageDateTime

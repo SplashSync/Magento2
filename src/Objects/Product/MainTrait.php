@@ -142,7 +142,8 @@ trait MainTrait
                 if (abs($new - $current) < 1E-3) {
                     break;
                 }
-                $this->setGeneric($fieldName, $new);
+                $this->object->setData($fieldName, $new);
+                $this->needUpdate();
 
                 break;
             case 'ts_dimensions_length':
@@ -158,7 +159,8 @@ trait MainTrait
                 if (abs($new - $current) < 1E-3) {
                     break;
                 }
-                $this->setGeneric($fieldName, $new);
+                $this->object->setData($fieldName, $new);
+                $this->needUpdate();
 
                 break;
             default:

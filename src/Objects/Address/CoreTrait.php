@@ -13,13 +13,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Local\Objects\Product;
+namespace Splash\Local\Objects\Address;
 
-use Magento\Catalog\Model\Product;
-use Splash\Local\Configurators\ProductConfigurator;
+use Splash\Local\Configurators\AddressConfigurator;
 
 /**
- *  Core Products Fields (required)
+ *  Core Address Fields (required)
  */
 trait CoreTrait
 {
@@ -31,16 +30,23 @@ trait CoreTrait
         //====================================================================//
         // Register Product Configurator
         $this->fieldsFactory()->registerConfigurator(
-            "Product",
-            new ProductConfigurator()
+            "Address",
+            new AddressConfigurator()
         );
         //====================================================================//
-        // Reference
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("sku")
-            ->name('Reference - SKU')
-            ->isListed()
-            ->microData("http://schema.org/Product", "model")
+        // Customer
+        $this->fieldsFactory()->Create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
+            ->identifier("customer_id")
+            ->name("Customer")
+            ->microData("http://schema.org/Organization", "ID")
+            ->isRequired()
+        ;
+        //====================================================================//
+        // Country ISO Code
+        $this->fieldsFactory()->create(SPL_T_COUNTRY)
+            ->identifier("country_iso")
+            ->name("Country ISO (Code)")
+            ->microData("http://schema.org/PostalAddress", "addressCountry")
             ->isRequired()
         ;
     }
@@ -59,16 +65,24 @@ trait CoreTrait
         // READ Fields
         switch ($fieldName) {
             //====================================================================//
-            // MAIN INFORMATIONS
+            // Customer Object Id Readings
+            case 'customer_id':
+                $customerId = $this->object->getCustomerId();
+                $this->out[$fieldName] = $customerId
+                    ? self::objects()->encode("ThirdParty", $customerId)
+                    : null
+                ;
+
+                break;
             //====================================================================//
-            case 'sku':
-                $this->getGeneric($fieldName);
+            // ISO Country Code
+            case 'country_iso':
+                $this->out[$fieldName] = $this->object->getCountryId();
 
                 break;
             default:
                 return;
         }
-
         unset($this->in[$key]);
     }
 
@@ -76,20 +90,33 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $data      Field Data
+     * @param mixed  $fieldData Field Data
      *
      * @return void
      */
-    protected function setCoreFields(string $fieldName, $data): void
+    protected function setCoreFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // MAIN INFORMATIONS
+            // Customer Object Id Writings
+            case 'customer_id':
+                //====================================================================//
+                // Decode Customer Id
+                $customerId = self::objects()->id($fieldData);
+                //====================================================================//
+                // Check For Change
+                if ($customerId && ($customerId != $this->object->getCustomerId())) {
+                    $this->object->setCustomerId((int) $customerId);
+                    $this->needUpdate();
+                }
+
+                break;
             //====================================================================//
-            case 'sku':
-                $this->setGeneric($fieldName, $data);
+            // ISO Country Code
+            case 'country_iso':
+                $this->setGeneric("countryId", $fieldData);
 
                 break;
             default:

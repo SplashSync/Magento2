@@ -15,42 +15,36 @@
 
 namespace   Splash\Local\Objects;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product as MageProduct;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Data\Customer as CustomerData;
 use Splash\Local\Helpers\MageHelper;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\UnitsHelperTrait;
 
 /**
- * Splash PHP Module For Magento 1 - Product Object Intégration
+ * Splash PHP Module For Magento 2 - ThirdParty Object Integration
  *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Product extends AbstractObject
+class ThirdParty extends AbstractObject
 {
     // Splash Php Core Traits
     use IntelParserTrait;
     use GenericFieldsTrait;
-    use UnitsHelperTrait;
 
     // Core / Common Traits
     use Core\CRUDTrait;
     use Core\ObjectListTrait;
 
-    // Product Traits
-    use Product\CoreTrait;
-    use Product\CRUDTrait;
-    use Product\ObjectListTrait;
-    use Product\DescTrait;
-    use Product\MainTrait;
-    use Product\StockTrait;
-    use Product\PricesTrait;
-    use Product\ImagesTrait;
-    use Product\MetadataTrait;
-    use Product\VariantsTrait;
+    // Customer Traits
+    use ThirdParty\CRUDTrait;
+    use ThirdParty\ObjectListTrait;
+    use ThirdParty\CoreTrait;
+    use ThirdParty\MainTrait;
+    use ThirdParty\AddressTrait;
+    use ThirdParty\AddressesTrait;
 
     // Core EAV Parser
     use Core\EavParserTrait;
@@ -64,17 +58,17 @@ class Product extends AbstractObject
      *
      * @var class-string
      */
-    protected static $modelClass = ProductInterface::class;
+    protected static $modelClass = Customer::class;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     protected $repository;
 
     /**
-     * Magento Product
+     * Magento Model
      *
-     * @var MageProduct
+     * @var CustomerData
      */
     protected $object;
 
@@ -83,19 +77,19 @@ class Product extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
      */
-    protected static $NAME = "Product";
+    protected static $NAME = "ThirdParty";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION = "Magento 2 Product Object";
+    protected static $DESCRIPTION = "Magento 2 Customer Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO = "fa fa-product-hunt";
+    protected static $ICO = "fa fa-user";
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -109,12 +103,26 @@ class Product extends AbstractObject
     protected static $ENABLE_PUSH_CREATED = false;
 
     /**
+     * Enable Update Of Existing Local Objects when Modified Remotely
+     *
+     * @var bool
+     */
+    protected static $ENABLE_PUSH_UPDATED = false;
+
+    /**
+     * Enable Delete Of Existing Local Objects when Deleted Remotely
+     *
+     * @var bool
+     */
+    protected static $ENABLE_PUSH_DELETED = false;
+
+    /**
      * Splash Product constructor.
      */
     public function __construct()
     {
-        /** @var ProductRepositoryInterface $repository */
-        $repository = MageHelper::getModel(ProductRepositoryInterface::class);
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = MageHelper::getModel(CustomerRepositoryInterface::class);
         $this->repository = $repository;
     }
 }

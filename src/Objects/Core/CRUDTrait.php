@@ -28,11 +28,17 @@ trait CRUDTrait
      */
     public function getObjectIdentifier()
     {
-        if (empty($this->object) || empty($this->object->getEntityId())) {
+        if (empty($this->object)) {
             return false;
         }
+        if (method_exists($this->object, 'getId') && !empty($this->object->getId())) {
+            return (string) $this->object->getId();
+        }
+        if (method_exists($this->object, 'getEntityId') && !empty($this->object->getEntityId())) {
+            return (string) $this->object->getEntityId();
+        }
 
-        return $this->object->getEntityId();
+        return false;
     }
 
     /**
@@ -42,29 +48,31 @@ trait CRUDTrait
      *
      * @return false|string Object Id
      */
-    protected function coreUpdate($needed)
+    protected function coreUpdate(bool $needed)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
         if (!$needed) {
-            return $this->object->getEntityId();
+            return $this->getObjectIdentifier();
         }
         //====================================================================//
         // Update Object
         try {
-            $this->object->save();
-//            $this->object = $this->repository->save($this->object);
+            method_exists($this->object, 'save')
+                ? $this->object->save()
+                : $this->repository->save($this->object)
+            ;
         } catch (Throwable $ex) {
             return Splash::log()->report($ex);
         }
         //====================================================================//
         // Ensure All changes have been saved
-        if ($this->object->hasDataChanges()) {
-            return Splash::log()->errTrace("Unable to update (".$this->object->getEntityId().").");
+        if (method_exists($this->object, 'hasDataChanges') && $this->object->hasDataChanges()) {
+            return Splash::log()->errTrace("Unable to update object.");
         }
 
-        return $this->object->getEntityId();
+        return $this->getObjectIdentifier();
     }
 
     /**

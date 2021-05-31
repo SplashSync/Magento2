@@ -29,8 +29,8 @@ class AttributesHelper
     /**
      * Get Attribute Label from Source Value
      *
-     * @param Attribute              $attribute
-     * @param array|float|int|string $value
+     * @param Attribute                        $attribute
+     * @param null|array|bool|float|int|string $value
      *
      * @return null|string
      */

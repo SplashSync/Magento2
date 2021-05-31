@@ -44,29 +44,6 @@ trait EavParserTrait
         "entity_id", "old_id"
     );
 
-//    /**
-//     * List of Eav Listed fields Ids
-//     *
-//     * @var array
-//     */
-//    protected static $eavListed = array();
-
-//    /**
-//     * List of Eav Required fields Ids
-//     *
-//     * @var array
-//     */
-//    protected static $eavRequired = array();
-
-//    /**
-//     * List of Eav Read Only fields Ids
-//     *
-//     * @var array
-//     */
-//    protected static $eavReadOnly = array(
-//        "created_at", "updated_at"
-//    );
-
     /**
      * Build Fields using FieldFactory
      */
@@ -126,12 +103,13 @@ trait EavParserTrait
         if (!$attribute || !isset($this->in[$key])) {
             return;
         }
+
         //====================================================================//
         // READ Fields
         try {
             $this->out[$fieldName] = EavHelper::toSplashValue(
                 $attribute,
-                $this->object->getData($fieldName)
+                $this->extractData($fieldName)
             );
         } catch (Exception $e) {
             Splash::log()->report($e);
@@ -161,11 +139,12 @@ trait EavParserTrait
         try {
             $current = EavHelper::toSplashValue(
                 $attribute,
-                $this->object->getData($fieldName)
+                $this->extractData($fieldName)
             );
             if ($fieldData != $current) {
                 $this->object->setData(
                     $fieldName,
+                    /** @phpstan-ignore-next-line */
                     EavHelper::toMageValue($attribute, $fieldData)
                 );
                 $this->needUpdate();
@@ -227,5 +206,27 @@ trait EavParserTrait
         }
 
         return $this->eavAttributes;
+    }
+
+    /**
+     * @param string $fieldName
+     *
+     * @return null|bool|float|int|string
+     */
+    private function extractData(string $fieldName)
+    {
+        if (method_exists($this->object, 'getData')) {
+            return $this->object->getData($fieldName);
+        }
+
+        try {
+            $method = "get".ucwords(str_replace("_", "", $fieldName));
+
+            return $this->object->{ $method }();
+        } catch (\Throwable $throwable) {
+            Splash::log()->err($throwable->getMessage());
+
+            return null;
+        }
     }
 }

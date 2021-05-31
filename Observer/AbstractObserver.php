@@ -17,6 +17,8 @@ namespace SplashSync\Magento2\Observer;
 
 use Exception;
 use Magento\Catalog\Model\Product;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Customer;
 use Magento\Framework\Event\Observer;
 use Splash\Client\Splash;
 use Splash\Components\Logger;
@@ -38,8 +40,8 @@ class AbstractObserver
      * @var class-string[]
      */
     private static $resourceFilter = array(
-        //        "customer/customer",
-        //        "customer/address",
+        Address::class,
+        Customer::class,
         Product::class,
         //        "sales/order",
         //        "sales/order_invoice"
@@ -51,8 +53,8 @@ class AbstractObserver
      * @var array<class-string, string>
      */
     private static $resourceTypes = array(
-        //        "customer/customer" => "ThirdParty",
-        //        "customer/address" => "Address",
+        Customer::class => "ThirdParty",
+        Address::class => "Address",
         Product::class => "Product",
         //        "sales/order" => "Order",
         //        "sales/order_invoice" => "Invoice"
@@ -64,8 +66,8 @@ class AbstractObserver
      * @var array<class-string, string>
      */
     private static $resourceNames = array(
-        //        "customer/customer" => "Customer",
-        //        "customer/address" => "Customer Address",
+        Customer::class => "ThirdParty",
+        Address::class => "Customer Address",
         Product::class => "Product",
         //        "sales/order" => "Customer Order",
         //        "sales/order_invoice" => "Customer Invoice"
@@ -76,7 +78,7 @@ class AbstractObserver
      *
      * @param Observer $observer
      *
-     * @return null|Product
+     * @return null|Address|Customer|Product
      */
     protected function filterEvent(Observer $observer): ?object
     {
@@ -89,8 +91,8 @@ class AbstractObserver
         //====================================================================//
         // Filter Object Type
         foreach (self::$resourceFilter as $resourceClass) {
-            if (is_subclass_of($object, $resourceClass)) {
-                /** @var Product $object */
+            if (($object instanceof $resourceClass) || is_subclass_of($object, $resourceClass)) {
+                /** @var Address|Customer|Product $object */
                 return $object;
             }
         }
@@ -108,6 +110,9 @@ class AbstractObserver
     protected static function getObjectType(object $object): ?string
     {
         foreach (self::$resourceTypes as $classString => $objectType) {
+            if ($object instanceof $classString) {
+                return $objectType;
+            }
             if (is_subclass_of($object, $classString)) {
                 return $objectType;
             }
@@ -126,6 +131,9 @@ class AbstractObserver
     protected static function getObjectName(object $object): ?string
     {
         foreach (self::$resourceNames as $classString => $objectName) {
+            if ($object instanceof $classString) {
+                return $objectName;
+            }
             if (is_subclass_of($object, $classString)) {
                 return $objectName;
             }

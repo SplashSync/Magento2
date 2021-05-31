@@ -15,42 +15,34 @@
 
 namespace   Splash\Local\Objects;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product as MageProduct;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Model\Address as MageAddress;
+use Magento\Customer\Model\Data\Address as MageAddressData;
 use Splash\Local\Helpers\MageHelper;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\UnitsHelperTrait;
 
 /**
- * Splash PHP Module For Magento 1 - Product Object Intégration
+ * Splash PHP Module For Magento 2 - ThirdParty Address Object Integration
  *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Product extends AbstractObject
+class Address extends AbstractObject
 {
     // Splash Php Core Traits
     use IntelParserTrait;
     use GenericFieldsTrait;
-    use UnitsHelperTrait;
 
     // Core / Common Traits
     use Core\CRUDTrait;
     use Core\ObjectListTrait;
 
-    // Product Traits
-    use Product\CoreTrait;
-    use Product\CRUDTrait;
-    use Product\ObjectListTrait;
-    use Product\DescTrait;
-    use Product\MainTrait;
-    use Product\StockTrait;
-    use Product\PricesTrait;
-    use Product\ImagesTrait;
-    use Product\MetadataTrait;
-    use Product\VariantsTrait;
+    // Address Fields
+    use Address\CRUDTrait;
+    use Address\ObjectListTrait;
+    use Address\CoreTrait;
+    use Address\MainTrait;
 
     // Core EAV Parser
     use Core\EavParserTrait;
@@ -64,19 +56,33 @@ class Product extends AbstractObject
      *
      * @var class-string
      */
-    protected static $modelClass = ProductInterface::class;
+    protected static $modelClass = MageAddress::class;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var AddressRepositoryInterface
      */
     protected $repository;
 
     /**
-     * Magento Product
+     * Magento Model
      *
-     * @var MageProduct
+     * @var MageAddressData
      */
     protected $object;
+
+    /**
+     * Magento Model Name
+     *
+     * @var string
+     */
+    protected static $modelName = 'customer/address';
+
+    /**
+     * Magento Model List Attributes
+     *
+     * @var array
+     */
+    protected static $listAttributes = array('entity_id', 'company', 'firstname', 'lastname', 'city');
 
     //====================================================================//
     // Object Definition Parameters
@@ -85,17 +91,17 @@ class Product extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME = "Product";
+    protected static $NAME = "Address";
 
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION = "Magento 2 Product Object";
+    protected static $DESCRIPTION = "Magento 1 Customers Address Object";
 
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO = "fa fa-product-hunt";
+    protected static $ICO = "fa fa-envelope-o";
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -109,12 +115,26 @@ class Product extends AbstractObject
     protected static $ENABLE_PUSH_CREATED = false;
 
     /**
+     * Enable Update Of Existing Local Objects when Modified Remotely
+     *
+     * @var bool
+     */
+    protected static $ENABLE_PUSH_UPDATED = false;
+
+    /**
+     * Enable Delete Of Existing Local Objects when Deleted Remotely
+     *
+     * @var bool
+     */
+    protected static $ENABLE_PUSH_DELETED = false;
+
+    /**
      * Splash Product constructor.
      */
     public function __construct()
     {
-        /** @var ProductRepositoryInterface $repository */
-        $repository = MageHelper::getModel(ProductRepositoryInterface::class);
+        /** @var AddressRepositoryInterface $repository */
+        $repository = MageHelper::getModel(AddressRepositoryInterface::class);
         $this->repository = $repository;
     }
 }
