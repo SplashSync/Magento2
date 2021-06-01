@@ -70,6 +70,8 @@ core_tests:
         ################################################################################
         - echo "\033[32m BEFORE --> Install Magento 2          \033[0m"
         - wait-for-mysql.sh           # Wait for Mysql Server Wakeup
+        - echo "$USER"
+        - ls -l /var/www/html/vendor/splash/
         - install-magento.sh          # First Time => INSTALL MAGENTO
         ################################################################################
         - echo "\033[32m BEFORE --> Setup Magento 2            \033[0m"
