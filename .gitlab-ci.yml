@@ -50,6 +50,7 @@ stages:
 ################################################################
 
 core_tests:
+    when:       manual
     image:      alexcheng/magento2
     stage:      tests
 #    retry:      2
@@ -125,7 +126,7 @@ docker:
     # Connect Docker to DockerHub
     - docker login -u splashsync -p $DOCKER_HUB_TOKEN
     # Build & Upload Splash All Docker Images
-    - docker build -t splashsync/magento2:2.4-php7.2 -f docker/magento/mage-2.4-php7.2.Dockerfile docker/magento
-    - docker push splashsync/magento2:2.4-php7.2
+    - docker build -t splashsync/magento2:2.4-php7.4 -f docker/magento/mage-2.4-php7.4.Dockerfile docker/magento
+    - docker push splashsync/magento2:2.4-php7.4
   except:
     - schedules
