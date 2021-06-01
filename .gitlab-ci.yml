@@ -51,39 +51,41 @@ stages:
 
 core_tests:
     when:       manual
-    image:      alexcheng/magento2
+    image:      registry.gitlab.com/splashsync/magento2:2.4-php7.4
+#    image:      alexcheng/magento2
     stage:      tests
 #    retry:      2
     tags:
       - Dedicated
     services:
       - name: mysql:5.7
+      - name: elasticsearch:7.5.1
+        alias: elasticsearch
+        command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
+
 
     ################################################################################
     # Install & Configure Environment
     before_script:
-      ################################################################################
-      - echo "\033[32m BEFORE --> Install Magento 2          \033[0m"
-      - install-magento
-      ################################################################################
-      - echo "\033[32m BEFORE --> Install Splash             \033[0m"
-      - cat /builds/SplashSync/Magento2/scripts/install-phpunit.sh | bash
-      - cat /builds/SplashSync/Magento2/scripts/install-dev-module.sh | bash
-      ################################################################################
-      - echo "\033[32m BEFORE --> Setup Magento 2            \033[0m"
-      - cat /builds/SplashSync/Magento2/scripts/setup-magento.sh | bash
-      - cat /builds/SplashSync/Magento2/scripts/compile-magento.sh | bash
+        ################################################################################
+        - echo "\033[32m BEFORE --> Install Magento 2          \033[0m"
+        - wait-for-mysql.sh           # Wait for Mysql Server Wakeup
+        - install-magento.sh          # First Time => INSTALL MAGENTO
+        ################################################################################
+        - echo "\033[32m BEFORE --> Setup Magento 2            \033[0m"
+        - setup-magento.sh            # Configure Magento
+        - compile-magento.sh          # Compile Magento
     ################################################################################
     # Run Test Script
     script:
-      - cd /var/www/html
-      - php bin/magento config/show
-      ################################################################################
-      - echo "\033[32m UNIT TESTS --> Init & Local             \033[0m"
-      - php /usr/bin/phpunit --testsuite=Local
-      ################################################################################
-      - echo "\033[32m UNIT TESTS --> Full                     \033[0m"
-      - php /usr/bin/phpunit --testsuite=Core
+        - cd /var/www/html
+        - php bin/magento config/show
+        ################################################################################
+        - echo "\033[32m UNIT TESTS --> Init & Local             \033[0m"
+        - php /usr/bin/phpunit --testsuite=Local
+        ################################################################################
+        - echo "\033[32m UNIT TESTS --> Full                     \033[0m"
+        - php /usr/bin/phpunit --testsuite=Core
     ################################################################################
     # Run After Script
 #    after_script:

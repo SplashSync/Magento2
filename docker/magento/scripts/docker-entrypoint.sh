@@ -31,6 +31,7 @@ fi
 ################################################################################
 wait-for-mysql.sh           # Wait for Mysql Server Wakeup
 install-magento.sh          # First Time => INSTALL MAGENTO
+install-sampledata.sh       # First Time => INSTALL SAMPLE DATA
 setup-magento.sh            # Configure Magento
 compile-magento.sh          # Compile Magento
 

@@ -36,18 +36,19 @@ services:
     ################################################################################
     # Magento 2 Latest
     magento:
-#        image: alexcheng/magento2
+#        image: registry.gitlab.com/splashsync/magento2:2.4-php7.4
         build:
             context:    ./docker/magento
-            dockerfile: mage-2.4-php7.2.Dockerfile
+            dockerfile: mage-2.4-php7.4.Dockerfile
         container_name: magento2-latest
         ports:
             - "80:80"
         depends_on:
             - mysql
+            - elasticsearch
         volumes:
             - ./:/builds/SplashSync/Magento2:ro
-#            - ./docker/magento/scripts/:/var/www/scripts:ro
+            - ./docker/magento/scripts/install-sampledata.sh:/usr/local/bin/install-sampledata.sh:ro
             # - /mnt/data/WebDesign/GitHub/Splash/Php-Core:/var/www/phpcore:ro
 #        command: sh /builds/SplashSync/Magento2/docker/magento/docker-entrypoint.sh
         env_file:
@@ -67,17 +68,17 @@ services:
         networks:
           - magento2
 
-#    ################################################################################
-#    # ElasticSearch Container
-#    elasticsearch:
-#        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.1'
-#        container_name: magento2-elastic
-#        logging: { driver: "none" }
-#        environment:
-#            ES_JAVA_OPTS: '${ES_JAVA_OPTS:--Xms512m -Xmx512m}'
-#            discovery.type: 'single-node'
-#        networks:
-#          - 'magento2'
+    ################################################################################
+    # ElasticSearch Container
+    elasticsearch:
+        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.1'
+        container_name: magento2-elastic
+        logging: { driver: "none" }
+        environment:
+            ES_JAVA_OPTS: '${ES_JAVA_OPTS:--Xms512m -Xmx512m}'
+            discovery.type: 'single-node'
+        networks:
+          - 'magento2'
 
 
     ################################################################################

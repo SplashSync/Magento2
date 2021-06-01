@@ -6,7 +6,7 @@ cd /var/www/html
 su www-data
 
 ################################################################################
-# First Time => INSTALL MAGENTO + SAMPLE DATA
+# First Time => INSTALL MAGENTO
 if [ ! -f installed.txt ]; then
 
     echo "Run Magento Installer"
@@ -28,8 +28,8 @@ if [ ! -f installed.txt ]; then
         --admin-email=$MAGENTO_ADMIN_EMAIL \
         --admin-user=$MAGENTO_ADMIN_USERNAME \
         --admin-password=$MAGENTO_ADMIN_PASSWORD \
-        --elasticsearch-host=$ELASTICSEARCH-HOST \
-        --elasticsearch-port=$ELASTICSEARCH-PORT \
+        --elasticsearch-host=$ELASTICSEARCH_HOST \
+        --elasticsearch-port=$ELASTICSEARCH_PORT \
         --enable-modules=MAGENTO_ENABLE \
         --disable-modules=$MAGENTO_DISABLE
 

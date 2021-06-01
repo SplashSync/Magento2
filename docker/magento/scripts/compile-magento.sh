@@ -24,8 +24,8 @@ echo "Enable Developer Mode"
 php bin/magento deploy:mode:set developer
 ################################################################################
 echo "Compile Magento"
-php bin/magento setup:upgrade -q
-php bin/magento setup:di:compile -q
+php bin/magento setup:upgrade
+php bin/magento setup:di:compile
 php bin/magento cache:enable
 php bin/magento cache:clean
 

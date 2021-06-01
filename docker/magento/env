@@ -23,6 +23,6 @@ MAGENTO_ADMIN_USERNAME=admin
 MAGENTO_ADMIN_PASSWORD=magentorocks1
 
 MAGENTO_ENABLE="SplashSync_Magento2"
-MAGENTO_DISABLE="Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_InventoryElasticsearch,Magento_Elasticsearch6,Magento_Elasticsearch7"
+MAGENTO_DISABLE="Magento_TwoFactorAuth,Magento_Elasticsearch6"
 
 COMPOSER_MEMORY_LIMIT=-1
