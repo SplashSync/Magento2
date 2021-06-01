@@ -1,0 +1,12 @@
+{
+    "name":                 "splash/magento2",
+    "description":          "Splash Module for Magento 2",
+    "type":                 "magento2-module",
+    "license":              "MIT",
+    "minimum-stability":    "dev",
+    "prefer-stable":        true,
+    "require": {
+        "php":                                  "^7.2",
+        "splash/phpcore":                       "dev-master"
+    }
+}

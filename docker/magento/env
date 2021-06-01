@@ -4,6 +4,9 @@ MYSQL_USER=magento
 MYSQL_PASSWORD=magento
 MYSQL_DATABASE=magento
 
+ELASTICSEARCH_HOST=elasticsearch
+ELASTICSEARCH_PORT=9200
+
 MAGENTO_LANGUAGE=en_US
 MAGENTO_TIMEZONE=Europe/Paris
 MAGENTO_DEFAULT_CURRENCY=EUR
@@ -18,5 +21,8 @@ MAGENTO_ADMIN_LASTNAME=MyStore
 MAGENTO_ADMIN_EMAIL=amdin@example.com
 MAGENTO_ADMIN_USERNAME=admin
 MAGENTO_ADMIN_PASSWORD=magentorocks1
+
+MAGENTO_ENABLE="SplashSync_Magento2"
+MAGENTO_DISABLE="Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_InventoryElasticsearch,Magento_Elasticsearch6,Magento_Elasticsearch7"
 
 COMPOSER_MEMORY_LIMIT=-1

@@ -17,20 +17,23 @@
 ################################################################################
 
 set -e
+su www-data
 
 ################################################################################
-# Install PhpUnit 8
-################################################################################
-
-if [ ! -f /usr/bin/phpunit ]; then
-    echo "Install Phpunit"
-    curl https://phar.phpunit.de/phpunit-8.5.9.phar -o phpunit
-    chown -R www-data:www-data phpunit
-    chmod -X phpunit
-    mv phpunit /usr/bin/phpunit
-else
-    echo "Phpunit Already Installed"
+# Ensure Splash Vendor DIR doesn't exists
+if [ -d /builds/SplashSync/Magento2/vendor ]; then
+    echo "Module Vendor MUST be Deleted before Docker Start"
+    exit 1
 fi
-php /usr/bin/phpunit --version
 
+################################################################################
+# INIT MAGENTO
+################################################################################
+wait-for-mysql.sh           # Wait for Mysql Server Wakeup
+install-magento.sh          # First Time => INSTALL MAGENTO
+setup-magento.sh            # Configure Magento
+compile-magento.sh          # Compile Magento
 
+#################################################################################
+# Start Apache
+exec apache2-foreground "$@"

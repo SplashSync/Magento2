@@ -36,7 +36,10 @@ services:
     ################################################################################
     # Magento 2 Latest
     magento:
-        image: alexcheng/magento2
+#        image: alexcheng/magento2
+        build:
+            context:    ./docker/magento
+            dockerfile: mage-2.4-php7.2.Dockerfile
         container_name: magento2-latest
         ports:
             - "80:80"
@@ -44,8 +47,9 @@ services:
             - mysql
         volumes:
             - ./:/builds/SplashSync/Magento2:ro
+#            - ./docker/magento/scripts/:/var/www/scripts:ro
             # - /mnt/data/WebDesign/GitHub/Splash/Php-Core:/var/www/phpcore:ro
-        command: sh /builds/SplashSync/Magento2/docker/magento/docker-entrypoint.sh
+#        command: sh /builds/SplashSync/Magento2/docker/magento/docker-entrypoint.sh
         env_file:
             - docker/magento/env
         networks:
@@ -62,6 +66,19 @@ services:
           - docker/magento/env
         networks:
           - magento2
+
+#    ################################################################################
+#    # ElasticSearch Container
+#    elasticsearch:
+#        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.1'
+#        container_name: magento2-elastic
+#        logging: { driver: "none" }
+#        environment:
+#            ES_JAVA_OPTS: '${ES_JAVA_OPTS:--Xms512m -Xmx512m}'
+#            discovery.type: 'single-node'
+#        networks:
+#          - 'magento2'
+
 
     ################################################################################
     # Splash Toolkit Container

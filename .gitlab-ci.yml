@@ -40,8 +40,9 @@ variables:
 
 ################################################################
 # Defined Pipeline Stages
-#stages:
-#  - tests
+stages:
+  - docker
+  - tests
 #  - deploy
 
 ################################################################
@@ -50,7 +51,7 @@ variables:
 
 core_tests:
     image:      alexcheng/magento2
-#    stage:      tests
+    stage:      tests
 #    retry:      2
     tags:
       - Dedicated
@@ -75,7 +76,7 @@ core_tests:
     # Run Test Script
     script:
       - cd /var/www/html
-      - php bin/magento
+      - php bin/magento config/show
       ################################################################################
       - echo "\033[32m UNIT TESTS --> Init & Local             \033[0m"
       - php /usr/bin/phpunit --testsuite=Local
@@ -106,3 +107,25 @@ core_tests:
 #    artifacts:
 #        paths:
 #            - public
+
+################################################################
+# Build Docker Images for Testing
+################################################################
+docker:
+  #    when:       manual
+  stage:      docker
+  image:      docker:stable
+  tags:       ['Dedicated-Docker']
+  services:
+    - docker:dind
+  before_script:
+    - docker info
+  script:
+    - echo "Build & Upload Docker Image"
+    # Connect Docker to DockerHub
+    - docker login -u splashsync -p $DOCKER_HUB_TOKEN
+    # Build & Upload Splash All Docker Images
+    - docker build -t splashsync/magento2:2.4-php7.2 -f docker/magento/mage-2.4-php7.2.Dockerfile docker/magento
+    - docker push splashsync/magento2:2.4-php7.2
+  except:
+    - schedules
