@@ -18,7 +18,6 @@
 
 set -e
 cd /var/www/html
-su www-data
 
 ################################################################################
 # Ensure Module is Installed

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-su www-data
-
 cd /var/www/html
 chown -R www-data:www-data /var/www
 
