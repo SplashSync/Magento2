@@ -11,7 +11,7 @@
     convertWarningsToExceptions     =   "true"
     processIsolation                =   "false"
     stopOnFailure                   =   "true"
-    bootstrap                       =   "./tests/framework/bootstrap.php"
+    bootstrap                       =   "./vendor/splash/magento2/tests/framework/bootstrap.php"
     verbose                         =   "true"
     timeoutForLargeTests            =   "120"
     cacheResult                     =   "false"
