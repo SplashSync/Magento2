@@ -126,7 +126,7 @@ docker:
     # Connect Docker to GitLab
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     # Build & Upload Splash All Docker Images
-    - docker build -t registry.gitlab.com/SplashSync/Magento2:2.4-php7.4 -f docker/magento/mage-2.4-php7.4.Dockerfile docker/magento
-    - docker push registry.gitlab.com/SplashSync/Magento2:2.4-php7.4
+    - docker build -t registry.gitlab.com/splashsync/magento2:2.4-php7.4 -f docker/magento/mage-2.4-php7.4.Dockerfile docker/magento
+    - docker push registry.gitlab.com/splashsync/magento2:2.4-php7.4
   except:
     - schedules
