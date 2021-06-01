@@ -11,10 +11,6 @@ ENV INSTALL_DIR             /var/www/html
 ENV MODULE_DIR              /builds/SplashSync/Magento2
 ENV COMPOSER_HOME           /var/www/.composer/
 
-WORKDIR     $INSTALL_DIR
-VOLUME      $INSTALL_DIR
-ENTRYPOINT  docker-entrypoint.sh
-
 ################################################################################
 # Install Libs
 ################################################################################
@@ -96,12 +92,16 @@ RUN create-magento.sh
 
 
 
-
 ################################################################################
 # Clean
 ################################################################################
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+WORKDIR     $INSTALL_DIR
+#VOLUME      $INSTALL_DIR
+ENTRYPOINT  docker-entrypoint.sh
+
+#RUN ls -l /var/www/html
 
 
 #COPY ./scripts/crontab /etc/cron.d/magento2-cron

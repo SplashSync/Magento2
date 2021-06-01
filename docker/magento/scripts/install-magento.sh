@@ -1,16 +1,35 @@
 #!/usr/bin/env bash
+################################################################################
+#
+#  This file is part of SplashSync Project.
+#
+#  Copyright (C) Splash Sync <www.splashsync.com>
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+#  For the full copyright and license information, please view the LICENSE
+#  file that was distributed with this source code.
+#
+#  @author Bernard Paquier <contact@splashsync.com>
+#
+################################################################################
 
-su www-data
-
+set -e
 cd /var/www/html
 su www-data
+
+################################################################################
+# Ensure Module is Installed
+composer require splash/magento2:dev-master --no-scripts --no-progress --no-suggest
 
 ################################################################################
 # First Time => INSTALL MAGENTO
 if [ ! -f installed.txt ]; then
 
     echo "Run Magento Installer"
-    bin/magento setup:install \
+    /var/www/html/bin/magento setup:install \
         --base-url=$MAGENTO_URL \
         --backend-frontname=$MAGENTO_BACKEND_FRONTNAME \
         --language=$MAGENTO_LANGUAGE \
@@ -30,7 +49,7 @@ if [ ! -f installed.txt ]; then
         --admin-password=$MAGENTO_ADMIN_PASSWORD \
         --elasticsearch-host=$ELASTICSEARCH_HOST \
         --elasticsearch-port=$ELASTICSEARCH_PORT \
-        --enable-modules=MAGENTO_ENABLE \
+        --enable-modules=$MAGENTO_ENABLE \
         --disable-modules=$MAGENTO_DISABLE
 
 fi

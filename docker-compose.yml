@@ -48,9 +48,9 @@ services:
             - elasticsearch
         volumes:
             - ./:/builds/SplashSync/Magento2:ro
-            - ./docker/magento/scripts/install-sampledata.sh:/usr/local/bin/install-sampledata.sh:ro
+#            - ./docker/magento/scripts/install-sampledata.sh:/usr/local/bin/install-sampledata.sh:ro
             # - /mnt/data/WebDesign/GitHub/Splash/Php-Core:/var/www/phpcore:ro
-#        command: sh /builds/SplashSync/Magento2/docker/magento/docker-entrypoint.sh
+        command: sh /builds/SplashSync/Magento2/docker/magento/scripts/docker-entrypoint.sh
         env_file:
             - docker/magento/env
         networks:
@@ -79,7 +79,6 @@ services:
             discovery.type: 'single-node'
         networks:
           - 'magento2'
-
 
     ################################################################################
     # Splash Toolkit Container

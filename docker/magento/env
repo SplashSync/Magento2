@@ -22,7 +22,7 @@ MAGENTO_ADMIN_EMAIL=amdin@example.com
 MAGENTO_ADMIN_USERNAME=admin
 MAGENTO_ADMIN_PASSWORD=magentorocks1
 
-MAGENTO_ENABLE="SplashSync_Magento2"
-MAGENTO_DISABLE="Magento_TwoFactorAuth,Magento_Elasticsearch6"
+MAGENTO_ENABLE=
+MAGENTO_DISABLE=Magento_TwoFactorAuth,Magento_Elasticsearch6
 
 COMPOSER_MEMORY_LIMIT=-1

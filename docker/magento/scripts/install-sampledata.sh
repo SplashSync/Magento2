@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ################################################################################
 #
 #  This file is part of SplashSync Project.
@@ -16,22 +16,27 @@
 #
 ################################################################################
 
+set -e
 cd /var/www
 
 ################################################################################
 # First Time => INSTALL MAGENTO
-if [ ! -f samples.txt ]; then
+if [ ! -f /var/www/html/samples.txt ]; then
 
     ################################################################################
     echo "Clone Sample Data Repository"
-    git clone https://github.com/magento/magento2-sample-data.git sampledata $MAGENTO_VERSION
-    cd sampledata
+    git clone https://github.com/magento/magento2-sample-data.git /var/www/sampledata
+    cd /var/www/sampledata
     git checkout $MAGENTO_VERSION
     ################################################################################
     echo "Deploy Sample Data"
-    chown -R www-data:www-data /var/www/sampledata/
     php -f /var/www/sampledata/dev/tools/build-sample-data.php -- --ce-source="/var/www/html"
-    chown -R www-data:www-data /var/www/html/
+    chown -Rf www-data:www-data /var/www/html/
+    chown -R www-data:www-data /var/www/sampledata/
+    chmod g+ws -Rf /var/www/sampledata
+    rm -rf var/cache/* var/page_cache/* generated/*
+    cd /var/www/html
+    php bin/magento setup:upgrade
 
 fi
-echo "Installed" > samples.txt
+echo "Installed" > /var/www/html/samples.txt
