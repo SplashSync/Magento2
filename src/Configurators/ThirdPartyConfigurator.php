@@ -77,8 +77,6 @@ class ThirdPartyConfigurator extends AbstractConfigurator
         // System - Read Only
         //====================================================================//
 
-        "website_id" => array('group' => "Meta", "excluded" => true),
-        "store_id" => array('group' => "Meta", "excluded" => true),
         "created_in" => array('group' => "Meta", "write" => false),
         "confirmation" => array('group' => "Meta", "write" => false),
 

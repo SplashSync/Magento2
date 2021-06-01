@@ -27,6 +27,8 @@ use Splash\Client\Splash;
 class OnSaveAfter extends AbstractObserver implements ObserverInterface
 {
     /**
+     * Execute Actions
+     *
      * @param Observer $observer
      */
     public function execute(Observer $observer)

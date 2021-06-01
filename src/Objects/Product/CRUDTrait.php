@@ -118,11 +118,11 @@ trait CRUDTrait
         $parent = $this->getParentProduct((int) $objectId);
         //====================================================================//
         // Execute Generic Magento Delete Function ...
-        $deleteResult = $this->coreDelete((int) $objectId);
+        $deleteResult = $this->coreDelete((int) $objectId, false);
         //====================================================================//
         // If We are Deleting the Last Simple Product of a Configurable
         if ($parent && empty($this->getChildrenIds($parent->getEntityId()))) {
-            $this->coreDelete($parent->getEntityId());
+            $this->coreDelete($parent->getEntityId(), false);
         }
 
         return $deleteResult;

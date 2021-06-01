@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
+use Splash\Local\Helpers\AccessHelper;
+
 /**
  * Magento 2 Customers Objects Lists Access
  */
@@ -33,7 +35,7 @@ trait ObjectListTrait
         //====================================================================//
         // Setup filters
         $filters = array(
-            //            array('attribute' => 'type_id',     'nin' => array("configurable"))
+            array('attribute' => 'store_id',     'in' => AccessHelper::getAllowedStores())
         );
         if (!empty($filter) && is_string($filter)) {
             $filters = array(

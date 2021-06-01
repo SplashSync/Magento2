@@ -102,6 +102,8 @@ trait AddressTrait
      * @param string $fieldName Field Identifier / Name
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getAddressFields(string $key, string $fieldName): void
     {
@@ -128,7 +130,9 @@ trait AddressTrait
             case 'city':
             case 'country_id':
             case 'telephone':
-                $this->getGeneric($fieldName, "address");
+                if ($this->address) {
+                    $this->getGeneric($fieldName, "address");
+                }
 
                 break;
             default:
@@ -152,7 +156,7 @@ trait AddressTrait
             try {
                 /** @var SplashAddress $address */
                 $address = Splash::object("Address");
-                $this->address = $address->load((string) $addressId) ?: null;
+                $this->address = $address->load($addressId) ?: null;
             } catch (Exception $exception) {
                 Splash::log()->err($exception->getMessage());
             }

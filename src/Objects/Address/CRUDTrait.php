@@ -18,6 +18,7 @@ namespace Splash\Local\Objects\Address;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Data\Address;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Helpers\AccessHelper;
 use Splash\Local\Helpers\MageHelper;
 use Throwable;
 
@@ -43,6 +44,9 @@ trait CRUDTrait
         try {
             /** @var Address $address */
             $address = $this->repository->getById((int) $objectId);
+            //====================================================================//
+            // Check if Object is Managed by Splash
+            AccessHelper::isManaged($address, true);
         } catch (Throwable $exception) {
             return Splash::log()->err($exception->getMessage());
         }

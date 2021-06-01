@@ -15,7 +15,9 @@
 
 namespace Splash\Local\Objects\Core;
 
+use Magento\Framework\Exception\CouldNotSaveException;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Helpers\AccessHelper;
 use Throwable;
 
 /**
@@ -63,6 +65,12 @@ trait CRUDTrait
                 ? $this->object->save()
                 : $this->repository->save($this->object)
             ;
+        } catch (CouldNotSaveException $exception) {
+            usleep((int) 1E5);
+            method_exists($this->object, 'save')
+                ? $this->object->save()
+                : $this->repository->save($this->object)
+            ;
         } catch (Throwable $ex) {
             return Splash::log()->report($ex);
         }
@@ -82,7 +90,7 @@ trait CRUDTrait
      *
      * @return bool
      */
-    protected function coreDelete(int $objectId = null)
+    protected function coreDelete(int $objectId = null, bool $checkAccess = true): bool
     {
         //====================================================================//
         // Stack Trace
@@ -97,6 +105,11 @@ trait CRUDTrait
             //====================================================================//
             // Load Object From DataBase
             $object = $this->repository->getById($objectId);
+            //====================================================================//
+            // Check if Object is Managed by Splash
+            if ($checkAccess) {
+                AccessHelper::isManaged($object, true);
+            }
         } catch (Throwable $exception) {
             return true;
         }

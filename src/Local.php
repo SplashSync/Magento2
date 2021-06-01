@@ -74,19 +74,12 @@ class Local implements LocalClassInterface
                 $parameters["WsHost"] = $serverUrl;
             }
         }
-        ////
-        ////        //====================================================================//
-        ////        // Override Module Parameters with Local User Selected Lang
-        ////        $parameters["DefaultLanguage"] = Mage::getStoreConfig('splashsync_splash_options/core/lang');
-        ////
-//        //====================================================================//
-//        // Override Module Local Name in Logs
-//        $parameters["localname"] = MageHelper::getStoreConfig('general/store_information/name');
-//
+        //====================================================================//
+        // Smart Notifications
+        $parameters["SmartNotify"] = (bool) MageHelper::getStoreConfig('splashsync/core/smart');
         //====================================================================//
         // Override Webservice Path
         $parameters["ServerPath"] = "/splash/ws/soap";
-//        $parameters["TraceOut"] = true;
 
         return $parameters;
     }
@@ -219,53 +212,9 @@ class Local implements LocalClassInterface
      */
     public function testParameters(): array
     {
-//        //====================================================================//
-//        // Load Recurrent Use Parameters
-//        $multiLang = Mage::getStoreConfig('splashsync_splash_options/langs/multilang');
-//        $defaultLang = Mage::getStoreConfig('splashsync_splash_options/langs/default_lang');
-//
         //====================================================================//
         // Init Parameters Array
         return array();
-//
-//        //====================================================================//
-//        // Server Actives Languages List
-//        $parameters["Langs"] = array();
-//
-//        //====================================================================//
-//        // Single Language Mode
-//        if (empty($multiLang) && !empty($defaultLang)) {
-//            $parameters["Langs"][] = Mage::getStoreConfig('splashsync_splash_options/langs/default_lang');
-//        //====================================================================//
-//        // Multi Language Mode
-//        } elseif (!empty($multiLang)) {
-//            foreach (Mage::app()->getStores() as $store) {
-//                $isoLang = Mage::getStoreConfig('splashsync_splash_options/langs/store_lang', $store->getId());
-//                $parameters["Langs"][$store->getId()] = $isoLang;
-//            }
-//        }
-//
-//        //====================================================================//
-//        // Setup Magento Prices Parameters
-//        //====================================================================//
-//
-//        //====================================================================//
-//        // Load Products Tax Rates
-//        $store = Mage::app()->getStore();
-//        /** @var \Mage_Tax_Model_Calculation $taxCalculation */
-//        $taxCalculation = Mage::getModel('tax/calculation');
-//        $taxRequest = $taxCalculation->getRateRequest(null, null, null, $store->getEntityId());
-//        $availableTaxes = $taxCalculation->getRatesForAllProductTaxClasses($taxRequest);
-//        //====================================================================//
-//        // Setup Tax Rate
-//        if (!empty($availableTaxes)) {
-//            $parameters["VAT"] = array_shift($availableTaxes);
-//        }
-//
-//        $parameters["Currency"] = Mage::app()->getStore()->getCurrentCurrencyCode();
-//        $parameters["CurrencySymbol"] = Mage::app()->getLocale()->currency($parameters["Currency"])->getSymbol();
-//        $parameters["PriceBase"] = ((bool) Mage::getStoreConfig('tax/calculation/price_includes_tax')) ? "TTC" : "HT";
-//        $parameters["PricesPrecision"] = 3;
     }
 
     /**
@@ -276,33 +225,9 @@ class Local implements LocalClassInterface
         switch ($name) {
             case "Main":
                 return array();
-//            case "ProductVATIncluded":
-//                $this->loadLocalUser();
-//                Mage::getConfig()->saveConfig('tax/calculation/price_includes_tax', '1');
-//                Mage::getConfig()->saveConfig('splashsync_splash_options/langs/multilang', '0');
-//                Mage::getConfig()->cleanCache();
-//
-//                return array();
-//            case "ProductVATExcluded":
-//                $this->loadLocalUser();
-//                Mage::getConfig()->saveConfig('tax/calculation/price_includes_tax', '0');
-//                Mage::getConfig()->saveConfig('splashsync_splash_options/langs/multilang', '0');
-//                Mage::getConfig()->cleanCache();
-//
-//                return array();
-//            case "Multilang":
-//                $this->loadLocalUser();
-//                Mage::getConfig()->saveConfig('tax/calculation/price_includes_tax', '0');
-//                Mage::getConfig()->saveConfig('splashsync_splash_options/langs/multilang', '1');
-//                Mage::getConfig()->cleanCache();
-//
-//                return array();
             case "List":
                 return array(
                     "Main"
-                    //                    "ProductVATIncluded" ,
-                    //                    "ProductVATExcluded" ,
-                    //                    "Multilang"
                 );
         }
 

@@ -25,7 +25,7 @@
                     <validate>required-entry no-whitespace</validate>
                 </field>
 
-                <field id="expert" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="expert" type="select" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable Expert Mode</label>
                     <comment>In this mode, you can access more detailed module informations.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -49,6 +49,12 @@
                     </depends>
                 </field>
 
+                <field id="smart" type="select" translate="label" sortOrder="75" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Smart Notifications</label>
+                    <comment>Only show user notifications when an Error Occurred.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
                 <field id="test" translate="label comment tooltip" type="button" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Test Connexion</label>
                     <frontend_model>SplashSync\Magento2\Block\Adminhtml\System\Config\TestConnexion</frontend_model>
@@ -69,7 +75,20 @@
                 </field>
             </group>
 
-            <group id="products" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="filters" translate="label" type="text" sortOrder="75" showInDefault="0" showInWebsite="1" showInStore="0">
+                <label>Data Filtering</label>
+                <comment>
+                    Enable/Disable Splash for Websites
+                </comment>
+
+                <field id="website" translate="label" type="select" sortOrder="10" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Disable</label>
+                    <comment>Disable Splash for this Website.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+
+            <group id="products" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Products Synchronization</label>
                 <comment>
                     Configure Splash Module for Products Synchronisations.

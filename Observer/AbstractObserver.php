@@ -20,8 +20,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Message\ManagerInterface;
 use Splash\Client\Splash;
 use Splash\Components\Logger;
+use Splash\Local\Helpers\AccessHelper;
 use Splash\Local\Helpers\MageHelper;
 
 /**
@@ -33,6 +35,11 @@ class AbstractObserver
      * @var string
      */
     protected static $action;
+
+    /**
+     * @var ManagerInterface
+     */
+    private static $messagesManager;
 
     /**
      * Objects Ressources Filter
@@ -91,10 +98,14 @@ class AbstractObserver
         //====================================================================//
         // Filter Object Type
         foreach (self::$resourceFilter as $resourceClass) {
-            if (($object instanceof $resourceClass) || is_subclass_of($object, $resourceClass)) {
-                /** @var Address|Customer|Product $object */
-                return $object;
+            //====================================================================//
+            // Check if Object is Tracked by Splash
+            if (!self::isTrackedClass($object, $resourceClass)) {
+                continue;
             }
+
+            /** @var Address|Customer|Product $object */
+            return $object;
         }
 
         return null;
@@ -170,49 +181,91 @@ class AbstractObserver
         }
         //====================================================================//
         // Commit Action on remotes nodes (Master & Slaves)
-        return Splash::commit($objectType, $local, $action, $user, $comment);
+        $result = Splash::commit($objectType, $local, $action, $user, $comment);
         //====================================================================//
         // Post Splash Messages
-//        $this->importLog(Splash::log());
+        $this->importLog(Splash::log());
+        //====================================================================//
+        // Commit Action on remotes nodes (Master & Slaves)
+        return $result;
     }
 
-//    /**
-//     * Import Splash Logs to User Session
-//     *
-//     * @param Logger $log
-//     */
-//    private function importLog($log): void
-//    {
-//        //====================================================================//
-//        // Import Errors
-//        if (isset($log->err) && !empty($log->err)) {
-//            $this->importMessages($log->err, "addError");
-//        }
-//        //====================================================================//
-//        // Import Warnings
-//        if (isset($log->war) && !empty($log->war)) {
-//            $this->importMessages($log->war, "addWarning");
-//        }
-//        //====================================================================//
-//        // Import Messages
-//        if (isset($log->msg) && !empty($log->msg)) {
-//            $this->importMessages($log->msg, "addSuccess");
-//        }
-//        //====================================================================//
-//        // Import Debug
-//        if (isset($log->deb) && !empty($log->deb)) {
-//            $this->importMessages($log->deb, "addSuccess");
-//        }
-//    }
+    /**
+     * Check if Object is on Splash Tracked Classes
+     *
+     * @param object       $object
+     * @param class-string $resourceClass
+     *
+     * @return bool
+     */
+    private static function isTrackedClass(object $object, string $resourceClass): bool
+    {
+        //====================================================================//
+        // Check if Object is Tracked by Splash
+        if (!($object instanceof $resourceClass)) {
+            return false;
+        }
+        //====================================================================//
+        // Check if Object is Managed by Splash
+        if (!($object instanceof Product)) {
+            try {
+                if (!AccessHelper::isManaged($object)) {
+                    return false;
+                }
+            } catch (Exception $exception) {
+                return false;
+            }
+        }
 
-//    /**
-//     * @param array  $messagesArray
-//     * @param string $method
-//     */
-//    private function importMessages($messagesArray, $method): void
-//    {
-//        foreach ($messagesArray as $message) {
-//            Mage::getSingleton('adminhtml/session')->{$method}($message);
-//        }
-//    }
+        return true;
+    }
+
+    /**
+     * Import Splash Logs to User Session
+     *
+     * @param Logger $log
+     */
+    private function importLog(Logger $log): void
+    {
+        //====================================================================//
+        // Ensure we are in Secured Area
+        if (!MageHelper::isSecuredArea()) {
+            return;
+        }
+        //====================================================================//
+        // Import Errors
+        if (!empty($log->err)) {
+            $this->importMessages($log->err, "addError");
+        }
+        //====================================================================//
+        // Import Warnings
+        if (!empty($log->war)) {
+            $this->importMessages($log->war, "addWarning");
+        }
+        //====================================================================//
+        // Import Messages
+        if (!empty($log->msg)) {
+            $this->importMessages($log->msg, "addSuccess");
+        }
+    }
+
+    /**
+     * Import Messages to Admin Session
+     *
+     * @param array  $messagesArray
+     * @param string $method
+     */
+    private function importMessages(array $messagesArray, string $method): void
+    {
+        //====================================================================//
+        // Ensure Connexion with Scope Config
+        if (!isset(self::$messagesManager)) {
+            /** @var ManagerInterface $messagesManager */
+            $messagesManager = MageHelper::getModel(ManagerInterface::class);
+            self::$messagesManager = $messagesManager;
+        }
+        foreach ($messagesArray as $message) {
+            self::$messagesManager->{$method}($message);
+        }
+    }
 }

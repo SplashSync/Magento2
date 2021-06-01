@@ -17,8 +17,11 @@ namespace Splash\Local\Helpers;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Directory\Model\Currency;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -102,6 +105,31 @@ trait MageHelper
     }
 
     /**
+     * Get a Config Value with Website or Store Select
+     *
+     * @param string   $key
+     * @param null|int $websiteId
+     * @param null|int $storeId
+     *
+     * @return mixed
+     */
+    public static function getConfig(string $key, ?int $websiteId = null, ?int $storeId = null)
+    {
+        //====================================================================//
+        // Ensure Connexion with Scope Config
+        if (!isset(self::$scopeConfig)) {
+            self::$scopeConfig = self::getObjectManager()->get(ScopeConfigInterface::class);
+        }
+        //====================================================================//
+        // Get a Website Config
+        if ($websiteId) {
+            return self::$scopeConfig->getValue($key, ScopeInterface::SCOPE_WEBSITE, $websiteId);
+        }
+
+        return self::$scopeConfig->getValue($key, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
      * Get Store Manager
      *
      * @return StoreManagerInterface
@@ -157,6 +185,29 @@ trait MageHelper
         }
 
         return self::$currency;
+    }
+
+    /**
+     * Check if Magento is in Secured Area
+     *
+     * @return bool
+     */
+    public static function isSecuredArea(): bool
+    {
+        /** @var null|bool $isSecured */
+        static $isSecured;
+
+        if (!isset($isSecured)) {
+            try {
+                /** @var State $state */
+                $state = self::getModel(State::class);
+                $isSecured = (Area::AREA_ADMINHTML == $state->getAreaCode());
+            } catch (LocalizedException $e) {
+                $isSecured = false;
+            }
+        }
+
+        return $isSecured;
     }
 
     /**

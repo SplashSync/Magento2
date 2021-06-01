@@ -37,6 +37,7 @@ class ThirdParty extends AbstractObject
     // Core / Common Traits
     use Core\CRUDTrait;
     use Core\ObjectListTrait;
+    use Core\WebsitesTrait;
 
     // Customer Traits
     use ThirdParty\CRUDTrait;
