@@ -19,11 +19,9 @@
 
     <testsuites>
         <testsuite name="Core">
-<!--            <directory>/var/www/phpcore/Tests</directory>-->
             <directory>vendor/splash/phpcore/Tests</directory>
         </testsuite>
         <testsuite name="Local">
-            <directory>tests</directory>
             <directory>vendor/splash/magento2/tests</directory>
         </testsuite>
     </testsuites>

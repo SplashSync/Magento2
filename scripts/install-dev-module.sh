@@ -35,6 +35,7 @@ fi
 
 
 chown -R www-data:www-data /var/www/html/
+ln -s vendor/splash/magento2/phpunit.xml.dist phpunit.xml.dist
 
 ################################################################################
 echo "Enable SplashSync Module"
