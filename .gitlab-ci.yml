@@ -50,7 +50,7 @@ stages:
 ################################################################
 
 core_tests:
-    when:       manual
+#    when:       manual
     image:      registry.gitlab.com/splashsync/magento2:2.4-php7.4
 #    image:      alexcheng/magento2
     stage:      tests
@@ -130,5 +130,8 @@ docker:
     # Build & Upload Splash All Docker Images
     - docker build -t registry.gitlab.com/splashsync/magento2:2.4-php7.4 -f docker/magento/mage-2.4-php7.4.Dockerfile docker/magento
     - docker push registry.gitlab.com/splashsync/magento2:2.4-php7.4
+  only:
+      changes:
+        - docker/*
   except:
     - schedules
