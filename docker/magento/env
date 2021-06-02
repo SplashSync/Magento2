@@ -25,4 +25,5 @@ MAGENTO_ADMIN_PASSWORD=magentorocks1
 MAGENTO_ENABLE=
 MAGENTO_DISABLE=Magento_TwoFactorAuth,Magento_Elasticsearch6
 
+
 COMPOSER_MEMORY_LIMIT=-1
