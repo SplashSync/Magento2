@@ -72,8 +72,6 @@ core_tests:
         ################################################################################
         - echo "\033[32m BEFORE --> Install Magento 2          \033[0m"
         - wait-for-mysql.sh           # Wait for Mysql Server Wakeup
-        - echo "$USER"
-        - ls -l /var/www/html/vendor/splash/
         - install-magento.sh          # First Time => INSTALL MAGENTO
         ################################################################################
         - echo "\033[32m BEFORE --> Setup Magento 2            \033[0m"
@@ -83,7 +81,7 @@ core_tests:
     # Run Test Script
     script:
         - cd /var/www/html
-        - php bin/magento config/show
+        - php bin/magento config:show
         ################################################################################
         - echo "\033[32m UNIT TESTS --> Init & Local             \033[0m"
         - php /usr/bin/phpunit --testsuite=Local
