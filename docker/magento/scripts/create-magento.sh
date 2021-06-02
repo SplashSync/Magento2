@@ -12,4 +12,4 @@ composer config minimum-stability dev
 COMPOSER_MEMORY_LIMIT=-1 composer require splash/magento2:dev-master --no-scripts --no-progress --no-suggest
 composer info | grep "splash"
 
-chmod 770 -Rf $INSTALL_DIR && chmod u+x bin/magento
+chmod 770 -Rf $INSTALL_DIR && chmod u+x bin/magento && chown -R www-data:www-data /var/www

@@ -58,54 +58,9 @@ RUN install-crontab.sh
 RUN create-magento.sh
 
 ################################################################################
-# Configure Scripts
-################################################################################
-#COPY ./scripts/install-magento /usr/local/bin/install-magento
-#RUN chmod +x /usr/local/bin/install-magento
-#
-#COPY ./scripts/install-sampledata /usr/local/bin/install-sampledata
-#RUN chmod +x /usr/local/bin/install-sampledata
-
-################################################################################
-# Configure Module
-################################################################################
-#COPY ./module/composer.json /builds/SplashSync/Magento2/composer.json
-
-
-################################################################################
-# Install Composer 2
-################################################################################
-#RUN curl -sS https://getcomposer.org/installer | php \
-#    && mv composer.phar /usr/local/bin/composer
-#COPY ./conf/auth.json $COMPOSER_HOME
-#
-#RUN chown -R www-data:www-data /var/www
-#RUN su www-data -c "composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition $INSTALL_DIR $MAGENTO_VERSION"
-
-################################################################################
-# Configure Folders
-################################################################################
-#RUN cd $INSTALL_DIR \
-#    && find . -type d -exec chmod 770 {} \; \
-#    && find . -type f -exec chmod 660 {} \; \
-#    && chmod u+x bin/magento
-
-
-
-################################################################################
 # Clean
 ################################################################################
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR     $INSTALL_DIR
-#VOLUME      $INSTALL_DIR
 ENTRYPOINT  docker-entrypoint.sh
-
-#RUN ls -l /var/www/html
-
-
-#COPY ./scripts/crontab /etc/cron.d/magento2-cron
-#RUN chmod 0644 /etc/cron.d/magento2-cron \
-#    && crontab -u www-data /etc/cron.d/magento2-cron
-
-
