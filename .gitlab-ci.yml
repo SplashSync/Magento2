@@ -23,6 +23,8 @@ variables:
   MYSQL_USER:               magento
   MYSQL_PASSWORD:           magento
   MYSQL_DATABASE:           magento
+  ELASTICSEARCH_HOST:       elasticsearch
+  ELASTICSEARCH_PORT:       9200
   MAGENTO_LANGUAGE:         en_US
   MAGENTO_TIMEZONE:         Europe/Paris
   MAGENTO_DEFAULT_CURRENCY: EUR
