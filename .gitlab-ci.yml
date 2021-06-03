@@ -88,7 +88,14 @@ core_tests:
         - php /usr/bin/phpunit --testsuite=Local
         ################################################################################
         - echo "\033[32m UNIT TESTS --> Full                     \033[0m"
-        - php /usr/bin/phpunit --testsuite=Core
+        - php /usr/bin/phpunit --testsuite=Core --testdox
+#        ################################################################################
+#        - echo "\033[32m QUALITY TESTS --> Compile        \033[0m"
+#        - cd /builds/SplashSync/Magento2
+#        - composer update
+#        ################################################################################
+#        - echo "\033[32m QUALITY TESTS --> Grumphp Travis        \033[0m"
+#        - php /usr/bin/phpunit --testsuite=Core --testdox
     ################################################################################
     # Run After Script
 #    after_script:
