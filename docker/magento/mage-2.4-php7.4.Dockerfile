@@ -63,4 +63,3 @@ RUN create-magento.sh
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR     $INSTALL_DIR
-ENTRYPOINT  docker-entrypoint.sh
