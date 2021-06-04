@@ -132,6 +132,8 @@ trait AddressTrait
             case 'telephone':
                 if ($this->address) {
                     $this->getGeneric($fieldName, "address");
+                } else {
+                    $this->out[$fieldName] = null;
                 }
 
                 break;
