@@ -85,7 +85,7 @@ trait PricesTrait
             case 'minimal_price':
                 $this->out[$fieldName] = self::toProductPrice(
                     (float) $this->object->getData($fieldName),
-                    $this->object->getData("tax_class_id")
+                    (int) $this->object->getData("tax_class_id")
                 );
 
                 break;
@@ -117,7 +117,7 @@ trait PricesTrait
                 // Read Current Price
                 $currentPrice = self::toProductPrice(
                     (float) $this->object->getData($fieldName),
-                    $this->object->getData("tax_class_id")
+                    (int) $this->object->getData("tax_class_id")
                 );
                 //====================================================================//
                 // Compare Prices

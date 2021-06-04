@@ -109,7 +109,7 @@ class Local implements LocalClassInterface
             if (!isset($isAreaSetupDone)) {
                 /** @var State $stateModel */
                 $stateModel = MageHelper::getModel(State::class);
-                $stateModel->setAreaCode(Area::AREA_WEBAPI_SOAP);
+                $stateModel->setAreaCode(Area::AREA_ADMINHTML);
                 $isAreaSetupDone = true;
             }
             $this->loadLocalUser();

@@ -88,11 +88,19 @@
                 </field>
             </group>
 
-            <group id="products" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Products Synchronization</label>
+            <group id="sync" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Synchronization</label>
                 <comment>
-                    Configure Splash Module for Products Synchronisations.
+                    Configure Splash Module for Synchronisations.
                 </comment>
+
+                <field id="website" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Website</label>
+                    <comment>Select Website Set used when Data are created by Splash.</comment>
+                    <validate>required-entry no-whitespace</validate>
+                    <source_model>Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider</source_model>
+                </field>
+
 
                 <field id="attribute_set" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Attribute Set</label>

@@ -58,6 +58,7 @@ class L01PopulateAttributesTest extends ObjectsCase
             $attribute = $model->getAttribute($name);
         }
         $this->assertInstanceOf(Attribute::class, $attribute);
+        AttributesHelper::addAttributeToSet($attribute, 4, "Product Details");
         //====================================================================//
         // Verify Attribute
         $this->assertTrue($attribute->isScopeGlobal());

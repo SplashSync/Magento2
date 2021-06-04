@@ -30,7 +30,6 @@ if (!defined('TESTS_TEMP_DIR')) {
 require_once __DIR__.'/autoload.php';
 \Magento\Framework\Phrase::setRenderer(new \Magento\Framework\Phrase\Renderer\Placeholder());
 
-error_reporting(E_ALL);
 ini_set('display_errors', "1");
 ini_set('precision', "14");
 ini_set('serialize_precision', "14");

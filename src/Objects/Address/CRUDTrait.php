@@ -82,8 +82,6 @@ trait CRUDTrait
         $address->setData("country_id", $this->in["country_iso"]);
         $address->setData("telephone", $this->in["telephone"]);
 
-        \Splash\Client\Splash::log()->www("In", $this->in);
-
         //====================================================================//
         // Save Object
         try {

@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Magento\Catalog\Model\Product;
 use Splash\Local\Configurators\ProductConfigurator;
 
 /**

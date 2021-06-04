@@ -35,11 +35,12 @@ trait CoreTrait
         );
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->Create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
             ->identifier("customer_id")
             ->name("Customer")
             ->microData("http://schema.org/Organization", "ID")
             ->isRequired()
+            ->isNotTested()
         ;
         //====================================================================//
         // Country ISO Code

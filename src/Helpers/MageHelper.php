@@ -25,6 +25,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 use Magento\User\Model\User;
 
 /**
@@ -61,6 +62,11 @@ trait MageHelper
      * @var Currency
      */
     private static $currency;
+
+    /**
+     * @var Website
+     */
+    private static $newWebsite;
 
     /**
      * Get Magento Model
@@ -185,6 +191,31 @@ trait MageHelper
         }
 
         return self::$currency;
+    }
+
+    /**
+     * Get Magento Default Website for Creation
+     *
+     * @return Website
+     */
+    public static function getDefaultNewWebsite():Website
+    {
+        if (!isset(self::$newWebsite)) {
+            $websiteId = self::getStoreConfig("splashsync/sync/website") ?: 1;
+            self::$newWebsite = self::getStoreManager()->getWebsite($websiteId);
+        }
+
+        return self::$newWebsite;
+    }
+
+    /**
+     * Get Magento Default Store for Creation
+     *
+     * @return Store
+     */
+    public static function getDefaultNewStore():Store
+    {
+        return self::getDefaultNewWebsite()->getDefaultStore();
     }
 
     /**

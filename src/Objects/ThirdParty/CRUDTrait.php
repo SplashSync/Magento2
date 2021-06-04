@@ -83,6 +83,8 @@ trait CRUDTrait
         $customer->setData("firstname", $this->in["firstname"]);
         $customer->setData("lastname", $this->in["lastname"]);
         $customer->setData("email", $this->in["email"]);
+        $customer->setData("website_id", MageHelper::getDefaultNewWebsite()->getId());
+        $customer->setData("store_id", MageHelper::getDefaultNewStore()->getId());
         //====================================================================//
         // Save Object
         try {

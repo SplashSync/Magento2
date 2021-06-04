@@ -16,6 +16,8 @@
 namespace Splash\Local\Helpers;
 
 use Exception;
+use Magento\Catalog\Model\Config;
+use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Eav\Model\Entity;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Setup\EavSetup;
@@ -174,6 +176,46 @@ class AttributesHelper
                 ),
                 'attribute_id' => $attribute->getId(),
             ));
+        } catch (\Throwable $throwable) {
+            return Splash::log()->report($throwable);
+        }
+
+        return true;
+    }
+
+    /**
+     * Add Attribute to Attribute Set
+     *
+     * @param Attribute $attribute
+     * @param int       $attributeSetId
+     * @param string    $groupCode
+     *
+     * @return bool
+     */
+    public static function addAttributeToSet(Attribute &$attribute, int $attributeSetId, string $groupCode): bool
+    {
+        //====================================================================//
+        // Only in Debug Mode (PhpUnit)
+        if (!Splash::isDebugMode()) {
+            return Splash::log()->err("Create Configurable Attributes is Forbidden, uses DEV Mode");
+        }
+        //====================================================================//
+        // Connect to Services
+        /** @var AttributeManagementInterface $attributeManagement */
+        $attributeManagement = MageHelper::createModel(AttributeManagementInterface::class);
+        /** @var Config $config */
+        $config = MageHelper::getModel(Config::class);
+        //====================================================================//
+        // Add Option to Attribute
+        try {
+            $groupId = $config->getAttributeGroupId($attributeSetId, $groupCode);
+            $attributeManagement->assign(
+                'catalog_product',
+                $attributeSetId,
+                (int) $groupId,
+                $attribute->getName(),
+                999
+            );
         } catch (\Throwable $throwable) {
             return Splash::log()->report($throwable);
         }

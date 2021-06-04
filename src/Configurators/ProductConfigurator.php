@@ -94,6 +94,7 @@ class ProductConfigurator extends AbstractConfigurator
         "custom_design" => array('write' => false, 'group' => "Meta"),
         "custom_layout" => array('write' => false, 'group' => "Meta"),
         'custom_layout_update' => array('write' => false, 'group' => "Meta"),
+        'custom_layout_update_file' => array('write' => false, 'group' => "Meta"),
         'custom_design_from' => array('write' => false, 'group' => "Meta"),
         'custom_design_to' => array('write' => false, 'group' => "Meta"),
 

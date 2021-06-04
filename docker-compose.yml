@@ -71,12 +71,14 @@ services:
     ################################################################################
     # ElasticSearch Container
     elasticsearch:
-        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.1'
+        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.2'
         container_name: magento2-elastic
         logging: { driver: "none" }
         environment:
             ES_JAVA_OPTS: '${ES_JAVA_OPTS:--Xms512m -Xmx512m}'
             discovery.type: 'single-node'
+            cluster.routing.allocation.disk.threshold_enabled: "false"
+            index.blocks.read_only_allow_delete: null
         networks:
           - 'magento2'
 
@@ -106,7 +108,7 @@ services:
         env_file:
           - docker/magento/env
         networks:
-          magento2:       { ipv4_address: 172.104.0.200, aliases: [ phpmyadmin.magento2.local ] }
+            magento2:       { ipv4_address: 172.104.0.200, aliases: [ phpmyadmin.magento2.local ] }
 
 
 volumes:

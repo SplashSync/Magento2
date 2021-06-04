@@ -147,12 +147,15 @@ trait CRUDTrait
             ->setWeight(1)
             ->setVisibility(Product\Visibility::VISIBILITY_BOTH)
             // Setup Product Attribute Set
-            ->setAttributeSetId(MageHelper::getStoreConfig('splashsync/products/attribute_set'))
+            ->setAttributeSetId(MageHelper::getStoreConfig('splashsync/sync/attribute_set'))
             // Setup Product Type => Always Simple when Created formOutside Magento
             ->setTypeId("simple")
             // Setup Product SKU & Name
             ->setData("sku", $this->in["sku"])
             ->setData("name", $this->in["name"])
+            // Setup Website
+            ->setData("website_id", MageHelper::getDefaultNewWebsite()->getId())
+            ->setData("store_id", MageHelper::getDefaultNewStore()->getId())
         ;
 
         return $product;
