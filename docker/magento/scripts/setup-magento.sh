@@ -53,4 +53,9 @@ bin/magento config:set splashsync/sync/website                          "1"
 bin/magento config:set splashsync/sync/attribute_set                    "4"
 bin/magento config:set splashsync/sync/logistic                         "1"
 
+################################################################################
+echo "Configure Carriers"
+bin/magento config:set carriers/freeshipping/active                     "1"
+
+
 
