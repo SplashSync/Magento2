@@ -34,13 +34,14 @@ trait StatusTrait
     {
         //====================================================================//
         // Order State
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("state")
-            ->Name("Status")
-            ->MicroData("http://schema.org/Order", "orderStatus")
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("state")
+            ->name("Status")
+            ->microData("http://schema.org/Order", "orderStatus")
             ->isListed()
-            ->AddChoices(OrderStatusHelper::getAllChoices())
+            ->addChoices(OrderStatusHelper::getAllChoices())
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+            ->isNotTested()
         ;
         //====================================================================//
         // Is Validated
