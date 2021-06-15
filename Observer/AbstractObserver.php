@@ -21,6 +21,7 @@ use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Sales\Model\Order;
 use Splash\Client\Splash;
 use Splash\Components\Logger;
 use Splash\Local\Helpers\AccessHelper;
@@ -50,7 +51,7 @@ class AbstractObserver
         Address::class,
         Customer::class,
         Product::class,
-        //        "sales/order",
+        Order::class,
         //        "sales/order_invoice"
     );
 
@@ -63,7 +64,7 @@ class AbstractObserver
         Customer::class => "ThirdParty",
         Address::class => "Address",
         Product::class => "Product",
-        //        "sales/order" => "Order",
+        Order::class => "Order",
         //        "sales/order_invoice" => "Invoice"
     );
 
@@ -73,10 +74,10 @@ class AbstractObserver
      * @var array<class-string, string>
      */
     private static $resourceNames = array(
-        Customer::class => "ThirdParty",
+        Customer::class => "Customer",
         Address::class => "Customer Address",
         Product::class => "Product",
-        //        "sales/order" => "Customer Order",
+        Order::class => "Customer Order",
         //        "sales/order_invoice" => "Customer Invoice"
     );
 

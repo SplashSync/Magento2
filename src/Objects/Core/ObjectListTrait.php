@@ -28,12 +28,13 @@ trait ObjectListTrait
     /**
      * Return Magento Generic Objects List with required filters
      *
-     * @param array $filters
-     * @param array $params  Search parameters for result List.
+     * @param array      $filters
+     * @param array      $params      Search parameters for result List.
+     * @param null|array $attrFilters
      *
      * @return array $data                 List of all customers main data
      */
-    public function coreObjectsList(array $filters = array(), array $params = array()): array
+    public function coreObjectsList(array $filters = array(), array $params = array(), array $attrFilters = null): array
     {
         //====================================================================//
         // Stack Trace
@@ -57,6 +58,11 @@ trait ObjectListTrait
         // Setup filters
         if (!empty($filters)) {
             $collection->addFieldToFilter($filters);
+        }
+        if (!empty($attrFilters) && method_exists($collection, "addFieldToSearchFilter")) {
+            foreach ($attrFilters as $attributeName => $condition) {
+                $collection->addFieldToSearchFilter($attributeName, $condition);
+            }
         }
         //====================================================================//
         // Setup Order & Pagination

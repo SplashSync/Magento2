@@ -101,13 +101,19 @@
                     <source_model>Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider</source_model>
                 </field>
 
-
                 <field id="attribute_set" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Attribute Set</label>
                     <comment>Select Attributes Set used when Products are created by Splash.</comment>
                     <validate>required-entry no-whitespace</validate>
                     <source_model>Magento\Catalog\Model\Product\AttributeSet\Options</source_model>
                 </field>
+
+                <field id="logistic" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Logistic Mode</label>
+                    <comment>Enable Logistic Feature: update of Order Status and Tracking Numbers.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
             </group>
         </section>
     </system>

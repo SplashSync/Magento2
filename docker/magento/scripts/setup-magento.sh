@@ -48,8 +48,9 @@ bin/magento config:set splashsync/core/host                             "http://
 bin/magento config:set splashsync/security/username                     "admin"
 
 ################################################################################
-echo "Configure Product Sync"
+echo "Configure Sync"
 bin/magento config:set splashsync/sync/website                          "1"
 bin/magento config:set splashsync/sync/attribute_set                    "4"
+bin/magento config:set splashsync/sync/logistic                         "1"
 
 

@@ -18,6 +18,7 @@
 
 set -e
 cd /var/www/html
+cp vendor/splash/magento2/phpunit.xml.dist ./phpunit.xml.dist
 
 ################################################################################
 echo "Enable Developer Mode"

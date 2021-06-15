@@ -25,6 +25,7 @@ if [ ! -f /var/www/html/samples.txt ]; then
 
     ################################################################################
     echo "Clone Sample Data Repository"
+    rm -Rf /var/www/sampledata
     git clone https://github.com/magento/magento2-sample-data.git /var/www/sampledata
     cd /var/www/sampledata
     git checkout $MAGENTO_VERSION

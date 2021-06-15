@@ -323,16 +323,6 @@ class Local implements LocalClassInterface
 //        return true;
 //    }
 
-//    /**
-//     * Check if Bundle Components Price Mode is Enabled
-//     *
-//     * @return bool
-//     */
-//    public static function isBundleComponantsPricesMode(): bool
-//    {
-//        return (bool) MageHelper::getStoreConfig('splashsync_splash_options/advanced/bundle_mode');
-//    }
-
     /**
      * Self Tests - Core Parameters
      *

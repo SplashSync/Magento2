@@ -38,11 +38,30 @@ trait AddressTrait
     protected function buildAddressFields(): void
     {
         $groupName = "Address";
+
+        //====================================================================//
+        // Company Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("address_company")
+            ->name("[A] Company")
+            ->group($groupName)
+            ->microData("http://schema.org/Organization", "legalName")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Contact Full Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("address_contact_name")
+            ->Name("[A] Contact Name")
+            ->MicroData("http://schema.org/PostalAddress", "alternateName")
+            ->group($groupName)
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Postal Address 1
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("street_1")
-            ->name("Street 1")
+            ->identifier("address_street_1")
+            ->name("[A] Street 1")
             ->Group($groupName)
             ->microData("http://schema.org/PostalAddress", "streetAddress")
             ->isReadOnly()
@@ -50,8 +69,8 @@ trait AddressTrait
         //====================================================================//
         // Postal Address 2
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("street_2")
-            ->name("Street 2")
+            ->identifier("address_street_2")
+            ->name("[A] Street 2")
             ->group($groupName)
             ->microData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
             ->isReadOnly()
@@ -59,8 +78,8 @@ trait AddressTrait
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("postcode")
-            ->name("Zip/Postal Code")
+            ->identifier("address_postcode")
+            ->name("[A] Zip/Postal Code")
             ->group($groupName)
             ->microData("http://schema.org/PostalAddress", "postalCode")
             ->isReadOnly()
@@ -68,8 +87,8 @@ trait AddressTrait
         //====================================================================//
         // City Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("city")
-            ->name("City")
+            ->identifier("address_city")
+            ->name("[A] City")
             ->group($groupName)
             ->microData("http://schema.org/PostalAddress", "addressLocality")
             ->isReadOnly()
@@ -77,8 +96,8 @@ trait AddressTrait
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->create(SPL_T_COUNTRY)
-            ->Identifier("country_id")
-            ->name("Country ISO")
+            ->Identifier("address_country_id")
+            ->name("[A] Country ISO")
             ->group($groupName)
             ->isLogged()
             ->microData("http://schema.org/PostalAddress", "addressCountry")
@@ -87,8 +106,8 @@ trait AddressTrait
         //====================================================================//
         // Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
-            ->identifier("telephone")
-            ->name("Telephone")
+            ->identifier("address_telephone")
+            ->name("[A] Telephone")
             ->microData("http://schema.org/PostalAddress", "telephone")
             ->group($groupName)
             ->isReadOnly()
@@ -108,8 +127,21 @@ trait AddressTrait
     protected function getAddressFields(string $key, string $fieldName): void
     {
         //====================================================================//
+        // Detect Address Fields Names
+        if (0 !== strpos($fieldName, "address_")) {
+            return;
+        }
+        $fieldId = substr($fieldName, strlen("address_"));
+
+        //====================================================================//
         // READ Fields
-        switch ($fieldName) {
+        switch ($fieldId) {
+            case 'contact_name':
+                $this->out[$fieldName] = $this->address
+                    ? $this->address->getFirstname()." ".$this->address->getLastname()
+                    : null;
+
+                break;
             //====================================================================//
             // Street Address
             case 'street_1':
@@ -126,12 +158,15 @@ trait AddressTrait
                 break;
             //====================================================================//
             // Generic Fields
+            case 'company':
             case 'postcode':
             case 'city':
             case 'country_id':
             case 'telephone':
                 if ($this->address) {
-                    $this->getGeneric($fieldName, "address");
+                    $this->getGeneric($fieldId, "address");
+                    $this->out[$fieldName] = $this->out[$fieldId];
+                    unset($this->out[$fieldId]);
                 } else {
                     $this->out[$fieldName] = null;
                 }

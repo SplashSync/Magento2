@@ -70,20 +70,11 @@ trait WebsitesTrait
      *
      * @return void
      */
-    protected function getWebsitesFields(string $key, string $fieldName): void
+    protected function getStoresFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
-            case 'website':
-                try {
-                    $website = MageHelper::getStoreManager()->getWebsite($this->object->getWebsiteId());
-                } catch (LocalizedException $e) {
-                    $website = null;
-                }
-                $this->out[$fieldName] = $website ? $website->getName() : null;
-
-                break;
             case 'store':
                 try {
                     $store = MageHelper::getStoreManager()->getStore($this->object->getStoreId());
@@ -93,9 +84,46 @@ trait WebsitesTrait
                 $this->out[$fieldName] = $store ? $store->getName() : null;
 
                 break;
-            case 'website_id':
             case 'store_id':
-                $this->getGeneric($fieldName);
+                $this->out[$fieldName] = $this->object->getStoreId();
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    protected function getWebsitesFields(string $key, string $fieldName): void
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            case 'website':
+                try {
+                    $store = MageHelper::getStoreManager()->getStore($this->object->getStoreId());
+                    $website = MageHelper::getStoreManager()->getWebsite($store->getWebsiteId());
+                } catch (LocalizedException $e) {
+                    $website = null;
+                }
+                $this->out[$fieldName] = $website ? $website->getName() : null;
+
+                break;
+            case 'website_id':
+                try {
+                    $store = MageHelper::getStoreManager()->getStore($this->object->getStoreId());
+                    $this->out[$fieldName] = $store->getWebsiteId();
+                } catch (LocalizedException $e) {
+                    $this->out[$fieldName] = null;
+                }
 
                 break;
             default:
