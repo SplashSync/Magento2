@@ -79,7 +79,7 @@ trait CoreTrait
         ;
         //====================================================================//
         // Order Date
-        $this->fieldsFactory()->create(SPL_T_DATE)
+        $this->fieldsFactory()->create(SPL_T_DATETIME)
             ->identifier("created_at")
             ->name("Date")
             ->microData("http://schema.org/Order", "orderDate")
