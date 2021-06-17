@@ -132,6 +132,7 @@ quality_tests:
   script:
     ################################################################################
     - echo "\033[32m QUALITY TESTS --> Compile        \033[0m"
+    - echo composer config --global home
     - cp ./docker/magento/conf/auth.json $HOME/.composer
     - composer update  --no-scripts
     ################################################################################
