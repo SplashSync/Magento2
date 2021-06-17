@@ -44,7 +44,7 @@ variables:
 # Defined Pipeline Stages
 stages:
   - docker
-  - tests
+  - Mage-2.4
 #  - deploy
 
 ################################################################
@@ -52,11 +52,9 @@ stages:
 ################################################################
 
 core_tests:
-    when:       manual
     image:      registry.gitlab.com/splashsync/magento2:2.4-php7.4
-#    image:      alexcheng/magento2
-    stage:      tests
-#    retry:      2
+    stage:      Mage-2.4
+    retry:      2
     tags:
       - Dedicated
     services:
@@ -87,19 +85,6 @@ core_tests:
         ################################################################################
         - echo "\033[32m UNIT TESTS --> Full                     \033[0m"
         - php /usr/bin/phpunit --testsuite=Core --testdox
-#        ################################################################################
-#        - echo "\033[32m QUALITY TESTS --> Compile        \033[0m"
-#        - cd /builds/SplashSync/Magento2
-#        - ls -l /builds/SplashSync/Magento2
-#        - chmod 777 -Rf /builds/SplashSync/Magento2
-#        - ls -l /builds/SplashSync/Magento2
-#        - composer update  --no-scripts
-#        ################################################################################
-#        - echo "\033[32m QUALITY TESTS --> Grumphp Travis        \033[0m"
-#        - php vendor/bin/grumphp run
-    ################################################################################
-    # Run After Script
-#    after_script:
 
 
 ################################################################
@@ -107,38 +92,29 @@ core_tests:
 ################################################################
 
 quality_tests:
-  #    when:       manual
-  image: registry.gitlab.com/badpixxel-projects/php-sdk:php-7.4
-  #    image:      alexcheng/magento2
-  stage:      tests
-  #    retry:      2
-  tags:
-    - Dedicated
-  services:
-    - name: mysql:5.7
-#  ################################################################################
-#  # Install & Configure Environment
-#  before_script:
-#    ################################################################################
-#    - echo "\033[32m BEFORE --> Install Magento 2          \033[0m"
-#    - wait-for-mysql.sh           # Wait for Mysql Server Wakeup
-#    - install-magento.sh          # First Time => INSTALL MAGENTO
-#    ################################################################################
-#    - echo "\033[32m BEFORE --> Setup Magento 2            \033[0m"
-#    - setup-magento.sh            # Configure Magento
-#    - compile-magento.sh          # Compile Magento
-  ################################################################################
-  # Run Test Script
-  script:
+    image: registry.gitlab.com/badpixxel-projects/php-sdk:php-7.4
+    stage:      Mage-2.4
+    tags:
+        - Dedicated
+    services:
+        - name: mysql:5.7
     ################################################################################
-    - echo "\033[32m QUALITY TESTS --> Compile        \033[0m"
-    - composer config --global home
-    - echo $HOME/.composer
-    - cp ./docker/magento/conf/auth.json /root/.config/composer
-    - composer update  --no-scripts
+    # Run Test Script
+    script:
+        ################################################################################
+        - echo "\033[32m QUALITY TESTS --> Compile        \033[0m"
+        - composer config --global home
+        - echo $HOME/.composer
+        - cp ./docker/magento/conf/auth.json /root/.config/composer
+        - composer update  --no-scripts
+        ################################################################################
+        - echo "\033[32m QUALITY TESTS --> Grumphp Travis        \033[0m"
+        - php vendor/bin/grumphp run
     ################################################################################
-    - echo "\033[32m QUALITY TESTS --> Grumphp Travis        \033[0m"
-    - php vendor/bin/grumphp run
+    # Run After Script
+    after_script:
+        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/after.sh | sh
+
 
 #################################################################
 ## Build Documentation
