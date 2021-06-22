@@ -102,16 +102,16 @@ class ShipmentsHelper
 
             //====================================================================//
             // Send email
-            try {
-                /** @var ShipmentNotifier $notifier */
-                $notifier = MageHelper::createModel(ShipmentNotifier::class);
-                $notifier->notify($shipment);
-                //====================================================================//
-                // Save Shipment
-                $shipment->save();
-            } catch (Throwable $throwable) {
-                Splash::log()->err($throwable->getMessage());
-            }
+//            try {
+//                /** @var ShipmentNotifier $notifier */
+//                $notifier = MageHelper::createModel(ShipmentNotifier::class);
+//                $notifier->notify($shipment);
+//                //====================================================================//
+//                // Save Shipment
+//                $shipment->save();
+//            } catch (Throwable $throwable) {
+//                Splash::log()->err($throwable->getMessage());
+//            }
 
             return $shipment;
         } catch (Exception $exception) {
