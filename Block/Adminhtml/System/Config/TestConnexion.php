@@ -13,8 +13,6 @@
  *  file that was distributed with this source code.
  */
 
-// phpcs:disable
-
 namespace SplashSync\Magento2\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
