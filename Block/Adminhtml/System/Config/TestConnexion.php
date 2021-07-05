@@ -17,7 +17,6 @@
 
 namespace SplashSync\Magento2\Block\Adminhtml\System\Config;
 
-use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Splash\Client\Splash;
@@ -37,7 +36,7 @@ class TestConnexion extends Field
         $uri = '/splash/ws/test?node='.Splash::configuration()->WsIdentifier;
 
         $element
-            ->setValue(__('Test Splash Connexion'))
+            ->setData("value", __('Test Splash Connexion'))
             ->setData("on_click", "javascript: location.href = '".$uri."';")
             ->setData("onclick", "javascript: location.href = '".$uri."';")
         ;
