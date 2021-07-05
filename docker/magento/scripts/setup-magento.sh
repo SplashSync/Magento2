@@ -23,7 +23,6 @@ cd /var/www/html
 echo "Enable SplashSync Module"
 php bin/magento module:disable SplashSync_Magento2
 php bin/magento module:enable SplashSync_Magento2
-bin/magento config:set dev/template/allow_symlink 1
 
 ################################################################################
 # Configure Magento for Development & Tests

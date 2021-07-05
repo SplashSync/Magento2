@@ -28,63 +28,20 @@ use Splash\Client\Splash;
 class TestConnexion extends Field
 {
     /**
-     * TestConnexion constructor.
-     *
-     * @param Context $context
-     * @param array   $data
-     */
-    public function __construct(Context $context, array $data = array())
-    {
-        parent::__construct($context, $data);
-        $this->_template = 'SplashSync_Magento2::testButton.phtml';
-    }
-
-    /**
      * @param AbstractElement $element
      *
      * @return mixed
      */
     public function render(AbstractElement $element)
     {
-        /** @phpstan-ignore-next-line */
-        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
-
-        return parent::render($element);
-    }
-
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     *
-     * @return string
-     */
-    public function getButtonHtml()
-    {
         $uri = '/splash/ws/test?node='.Splash::configuration()->WsIdentifier;
 
-        /** @phpstan-ignore-next-line */
-        $button = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
-        )->setData(
-            array(
-                'id' => 'btnid',
-                'label' => __('Test Splash Connexion'),
-                'onclick' => "javascript: location.href = '".$uri."';"
-            )
-        );
+        $element
+            ->setValue(__('Test Splash Connexion'))
+            ->setData("on_click", "javascript: location.href = '".$uri."';")
+            ->setData("onclick", "javascript: location.href = '".$uri."';")
+        ;
 
-        return $button->toHtml();
-    }
-
-    /**
-     * @param AbstractElement $element
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function _getElementHtml(AbstractElement $element)
-    {
-        return $this->_toHtml();
+        return parent::render($element);
     }
 }
