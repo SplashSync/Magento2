@@ -17,6 +17,7 @@ namespace   Splash\Local\Objects;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Splash\Local\Helpers\MageHelper;
 use Splash\Models\AbstractObject;
@@ -65,6 +66,11 @@ class ThirdParty extends AbstractObject
      * @var CustomerRepositoryInterface
      */
     protected $repository;
+
+    /**
+     * @var CustomerRegistry
+     */
+    protected $registry;
 
     /**
      * Magento Model
@@ -125,5 +131,8 @@ class ThirdParty extends AbstractObject
         /** @var CustomerRepositoryInterface $repository */
         $repository = MageHelper::getModel(CustomerRepositoryInterface::class);
         $this->repository = $repository;
+        /** @var CustomerRegistry $registry */
+        $registry = MageHelper::getModel(CustomerRegistry::class);
+        $this->registry = $registry;
     }
 }

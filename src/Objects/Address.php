@@ -17,7 +17,7 @@ namespace   Splash\Local\Objects;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Model\Address as MageAddress;
-use Magento\Customer\Model\Data\Address as MageAddressData;
+use Magento\Customer\Model\AddressRegistry;
 use Splash\Local\Helpers\MageHelper;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\GenericFieldsTrait;
@@ -64,9 +64,14 @@ class Address extends AbstractObject
     protected $repository;
 
     /**
+     * @var AddressRegistry
+     */
+    protected $registry;
+
+    /**
      * Magento Model
      *
-     * @var MageAddressData
+     * @var MageAddress
      */
     protected $object;
 
@@ -136,5 +141,8 @@ class Address extends AbstractObject
         /** @var AddressRepositoryInterface $repository */
         $repository = MageHelper::getModel(AddressRepositoryInterface::class);
         $this->repository = $repository;
+        /** @var AddressRegistry $registry */
+        $registry = MageHelper::getModel(AddressRegistry::class);
+        $this->registry = $registry;
     }
 }

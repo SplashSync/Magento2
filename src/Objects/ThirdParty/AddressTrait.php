@@ -15,9 +15,8 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Exception;
-use Magento\Customer\Model\Data\Address;
-use Splash\Core\SplashCore      as Splash;
+use Magento\Customer\Model\Address;
+use Magento\Sales\Api\Data\OrderAddressInterface;
 use Splash\Local\Objects\Address as SplashAddress;
 
 /**
@@ -26,7 +25,7 @@ use Splash\Local\Objects\Address as SplashAddress;
 trait AddressTrait
 {
     /**
-     * @var null|Address
+     * @var null|Address|OrderAddressInterface
      */
     private $address;
 
@@ -112,6 +111,16 @@ trait AddressTrait
             ->group($groupName)
             ->isReadOnly()
         ;
+        //====================================================================//
+        // Relay Point Code
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("address_relay_code")
+            ->name("[A] Relay Code")
+            ->description("Relay Point Code")
+            ->microData("http://schema.org/PostalAddress", "description")
+            ->group($groupName)
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -179,24 +188,58 @@ trait AddressTrait
     }
 
     /**
-     * Load Customer Billing Address
+     * Read requested Field
      *
-     * @param null|string $addressId
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function getAddressRelayFields(string $key, string $fieldName): void
+    {
+        //====================================================================//
+        // Detect Address Fields Names
+        if ("address_relay_code" != $fieldName) {
+            return;
+        }
+        $this->out[$fieldName] = null;
+        unset($this->in[$key]);
+        //====================================================================//
+        // No Address Loaded
+        if (empty($this->address) || !method_exists($this->address, "getData")) {
+            return;
+        }
+        //====================================================================//
+        // Detect Mondial Relay Point Code
+        $mrPointCode = $this->address->getData('mondialrelay_pickup_id');
+        if (!empty($mrPointCode) && is_scalar($mrPointCode)) {
+            $this->out[$fieldName] = (string) $mrPointCode;
+        }
+    }
+
+    /**
+     * Load Customer Main Address
+     *
+     * @param null|Address $address
      *
      * @return void
      */
-    protected function loadAddress(?string $addressId): void
+    protected function loadMainAddress(?Address $address): void
     {
-        $this->address = null;
+        $this->address = $address;
+    }
 
-        if ($addressId) {
-            try {
-                /** @var SplashAddress $address */
-                $address = Splash::object("Address");
-                $this->address = $address->load($addressId) ?: null;
-            } catch (Exception $exception) {
-                Splash::log()->err($exception->getMessage());
-            }
-        }
+    /**
+     * Load Order Main Address
+     *
+     * @param null|OrderAddressInterface $address
+     *
+     * @return void
+     */
+    protected function loadOrderAddress(?OrderAddressInterface $address): void
+    {
+        $this->address = $address;
     }
 }

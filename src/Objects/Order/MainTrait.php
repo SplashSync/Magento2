@@ -70,6 +70,27 @@ trait MainTrait
             ->microData("https://schema.org/PriceSpecification", "priceCurrencyRate")
             ->isReadOnly()
         ;
+
+        //====================================================================//
+        // ORDER Adresses
+        //====================================================================//
+
+        //====================================================================//
+        // Billing Address
+        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
+            ->identifier("billing_address_id")
+            ->name('Billing Address ID')
+            ->microData("http://schema.org/Order", "billingAddress")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Shipping Address
+        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
+            ->identifier("shipping_address_id")
+            ->name('Shipping Address ID')
+            ->microData("http://schema.org/Order", "orderDelivery")
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -96,6 +117,14 @@ trait MainTrait
             case 'order_currency_code':
             case 'base_to_order_rate':
                 $this->getGeneric($fieldName);
+
+                break;
+            case 'billing_address_id':
+            case 'shipping_address_id':
+                $addressId = $this->object->getData($fieldName);
+                $this->out[$fieldName] = $addressId
+                    ? self::objects()->encode("Address", $addressId)
+                    : null;
 
                 break;
             default:

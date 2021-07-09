@@ -61,16 +61,20 @@ trait CRUDTrait
         //====================================================================//
         // Update Object
         try {
-            method_exists($this->object, 'save')
-                ? $this->object->save()
-                : $this->repository->save($this->object)
-            ;
+            if (method_exists($this->object, 'save')) {
+                $this->object->save();
+            } else {
+                /** @phpstan-ignore-next-line */
+                $this->repository->save($this->object);
+            }
         } catch (CouldNotSaveException $exception) {
             usleep((int) 1E5);
-            method_exists($this->object, 'save')
-                ? $this->object->save()
-                : $this->repository->save($this->object)
-            ;
+            if (method_exists($this->object, 'save')) {
+                $this->object->save();
+            } else {
+                /** @phpstan-ignore-next-line */
+                $this->repository->save($this->object);
+            }
         } catch (Throwable $ex) {
             return Splash::log()->report($ex);
         }

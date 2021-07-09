@@ -70,7 +70,7 @@ trait CoreTrait
             case 'customer_id':
                 $customerId = $this->object->getCustomerId();
                 $this->out[$fieldName] = $customerId
-                    ? self::objects()->encode("ThirdParty", $customerId)
+                    ? self::objects()->encode("ThirdParty", (string) $customerId)
                     : null
                 ;
 

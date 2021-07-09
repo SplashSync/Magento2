@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Data\Customer;
+use Magento\Customer\Model\Customer;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Helpers\AccessHelper;
 use Splash\Local\Helpers\MageHelper;
@@ -43,8 +43,12 @@ trait CRUDTrait
         // Load Object
         try {
             /** @var Customer $customer */
-            $customer = $this->repository->getById((int) $objectId);
-            $this->loadAddress($customer->getDefaultBilling());
+            $customer = $this->registry->retrieve($objectId);
+            $billingAddress = $customer->getDefaultBillingAddress();
+            !empty($billingAddress)
+                ? $this->loadMainAddress($billingAddress)
+                : $this->loadMainAddress(null)
+            ;
             //====================================================================//
             // Check if Object is Managed by Splash
             AccessHelper::isManaged($customer, true);
@@ -88,6 +92,7 @@ trait CRUDTrait
         //====================================================================//
         // Save Object
         try {
+            /** @phpstan-ignore-next-line */
             return $this->repository->save($customer);
         } catch (Throwable $exception) {
             return Splash::log()->err($exception->getMessage());

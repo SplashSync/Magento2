@@ -42,10 +42,7 @@ trait CRUDTrait
         try {
             /** @var Order $order */
             $order = $this->repository->get((int) $objectId);
-            $address = $order->getShippingAddress();
-            if ($address) {
-                $this->loadAddress($address->getId());
-            }
+            $this->loadOrderAddress($order->getShippingAddress() ?: null);
             //====================================================================//
             // Check if Object is Managed by Splash
             AccessHelper::isManaged($order, true);

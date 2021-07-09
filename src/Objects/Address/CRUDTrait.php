@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Model\Data\Address;
+use Magento\Customer\Model\Address;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Helpers\AccessHelper;
 use Splash\Local\Helpers\MageHelper;
@@ -43,7 +43,7 @@ trait CRUDTrait
         // Load Object
         try {
             /** @var Address $address */
-            $address = $this->repository->getById((int) $objectId);
+            $address = $this->registry->retrieve((int) $objectId);
             //====================================================================//
             // Check if Object is Managed by Splash
             AccessHelper::isManaged($address, true);
@@ -73,7 +73,7 @@ trait CRUDTrait
         // Create Empty Customer Address
         /** @var Address $address */
         $address = MageHelper::createModel(AddressInterface::class);
-        $address->setData("customer_id", self::objects()->id($this->in["customer_id"]));
+        $address->setData("customer_id", self::objects()->id($this->in["customer_id"]) ?: null);
         $address->setData("firstname", $this->in["firstname"]);
         $address->setData("lastname", $this->in["lastname"]);
         $address->setData("street", $this->in["street_1"]);
@@ -85,6 +85,7 @@ trait CRUDTrait
         //====================================================================//
         // Save Object
         try {
+            /** @phpstan-ignore-next-line */
             return $this->repository->save($address);
         } catch (Throwable $exception) {
             return Splash::log()->err($exception->getMessage());

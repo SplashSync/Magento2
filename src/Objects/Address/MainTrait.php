@@ -15,7 +15,8 @@
 
 namespace Splash\Local\Objects\Address;
 
-use Magento\Customer\Model\Data\Address;
+use Magento\Customer\Model\Address;
+use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
  *  Main Address Fields (required)
@@ -25,17 +26,18 @@ trait MainTrait
     /**
      * Get Indexed Street Address
      *
-     * @param Address $address
-     * @param int     $index
+     * @param Address|OrderAddressInterface $address
+     * @param int                           $index
      *
      * @return null|string
      */
-    public static function getStreet(Address $address, int $index): ?string
+    public static function getStreet($address, int $index): ?string
     {
         $street = $address->getStreet() ?: array();
 
         return $street[$index] ?? null;
     }
+
     /**
      * Build Core Fields using FieldFactory
      */

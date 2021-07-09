@@ -77,6 +77,13 @@ class MsiStocksHelper
          */
         static $sourceRepository;
 
+        //====================================================================//
+        // Safety Check - If Module is Disabled
+        if (!class_exists(SourceRepository::class)) {
+            return array();
+        }
+        //====================================================================//
+        // Connect to Sources Repository
         if (!$sourceRepository) {
             /** @var SourceRepository $sourceRepository */
             $sourceRepository = MageHelper::getModel(SourceRepository::class);

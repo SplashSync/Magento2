@@ -59,10 +59,18 @@ class AccessHelper
      */
     public static function isManaged(object $mageObject, bool $throwException = false): bool
     {
-        if (!method_exists($mageObject, "getStoreId")) {
-            return true;
+        //====================================================================//
+        // Detect Store Id from  Object
+        $storeId = null;
+        if (method_exists($mageObject, "getStore")) {
+            $storeId = $mageObject->getStore()->getId();
         }
-        if (!empty($mageObject->getStoreId()) && !self::isAllowedStore($mageObject->getStoreId())) {
+        if (method_exists($mageObject, "getStoreId")) {
+            $storeId = $mageObject->getStoreId();
+        }
+        //====================================================================//
+        // Check Store Id
+        if (!empty($storeId) && !self::isAllowedStore($storeId)) {
             if ($throwException) {
                 throw new Exception("Access not allowed for Splash on this Website/Store");
             }
