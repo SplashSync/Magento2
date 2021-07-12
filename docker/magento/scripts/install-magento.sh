@@ -21,7 +21,8 @@ cd /var/www/html
 
 ################################################################################
 # Ensure Module is Installed
-composer require splash/magento2:@stable --no-scripts --no-progress
+composer config minimum-stability dev
+composer require splash/magento2:dev-master --no-scripts --no-progress
 
 ################################################################################
 # First Time => INSTALL MAGENTO
