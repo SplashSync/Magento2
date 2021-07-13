@@ -82,7 +82,7 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_DATETIME)
             ->identifier("created_at")
             ->name("Date")
-            ->microData("http://schema.org/Order", "orderDate")
+            ->microData("http://schema.org/DataFeedItem", "dateCreated")
             ->isReadOnly()
             ->isListed()
         ;

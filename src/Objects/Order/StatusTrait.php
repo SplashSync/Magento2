@@ -240,7 +240,7 @@ trait StatusTrait
                 break;
             //====================================================================//
             // Cancel Order
-            case OrderStatusHelper::CANCELED:
+            case Order::STATE_CANCELED:
                 if (!$order->canCancel()) {
                     $order->cancel()->save();
                 } else {
