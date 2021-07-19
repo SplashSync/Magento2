@@ -66,6 +66,7 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("shipping_method")
             ->name("Shipping Method")
+            ->microData("http://schema.org/ParcelDelivery", "identifier")
             ->isReadOnly()
             ->isListed()
         ;
@@ -74,6 +75,7 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("shipping_description")
             ->name("Shipping Description")
+            ->microData("http://schema.org/ParcelDelivery", "description")
             ->isReadOnly()
             ->isListed()
         ;

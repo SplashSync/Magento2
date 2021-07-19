@@ -38,6 +38,13 @@ class OrderStatusHelper extends Status
     );
 
     /**
+     * List of Available Magento 2 Order Statuses
+     *
+     * @var null|array<string, string>
+     */
+    private static $customStatuses;
+
+    /**
      * Convert Magento Status to Splash
      *
      * @param string $mageStatus
@@ -46,6 +53,15 @@ class OrderStatusHelper extends Status
      */
     public static function toSplash(string $mageStatus): string
     {
+        //====================================================================//
+        // Search for Most advanced Custom Status
+        $customStatuses = self::getCustomStatus();
+        $customStatus = array_search($mageStatus, array_reverse($customStatuses), true);
+        if (!empty($customStatus)) {
+            return $customStatus;
+        }
+        //====================================================================//
+        // Use Generic Status
         return self::$statuses[$mageStatus] ?: self::UNKNOWN;
     }
 
@@ -58,6 +74,39 @@ class OrderStatusHelper extends Status
      */
     public static function toMage(string $splashStatus): string
     {
+        //====================================================================//
+        // Check if a Custom Status is Selected
+        $customStatuses = self::getCustomStatus();
+        if (!empty($customStatuses[$splashStatus])) {
+            return $customStatuses[$splashStatus];
+        }
+        //====================================================================//
+        // Use Generic Status
         return array_flip(self::$statuses)[$splashStatus] ?: self::UNKNOWN;
+    }
+
+    /**
+     * Load Custom Order Status from Magento Config
+     *
+     * @return array<string, string>
+     */
+    private static function getCustomStatus(): array
+    {
+        //====================================================================//
+        // Cache Already Loaded
+        if (is_array(self::$customStatuses)) {
+            return self::$customStatuses;
+        }
+        //====================================================================//
+        // Load Custom Statuses from Config
+        self::$customStatuses = array();
+        foreach (self::getAll() as $splStatus) {
+            $mageStatus = MageHelper::getStoreConfig("splashsync/orders/".$splStatus);
+            if ($mageStatus) {
+                self::$customStatuses[(string) $splStatus] = $mageStatus;
+            }
+        }
+
+        return self::$customStatuses;
     }
 }

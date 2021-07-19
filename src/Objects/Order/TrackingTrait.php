@@ -46,7 +46,7 @@ trait TrackingTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("carrier_code")
             ->name("Carrier Code")
-            ->microData("http://schema.org/ParcelDelivery", "identifier")
+            ->microData("http://schema.org/ParcelDelivery", "alternateName")
             ->isReadOnly()
         ;
         //====================================================================//

@@ -248,8 +248,21 @@ trait StatusTrait
                 }
 
                 break;
+            //====================================================================//
+            // Other Order Status
             default:
-                return Splash::log()->war("This order state is not managed");
+                if (!empty($mageStatus)) {
+                    try {
+                        $order->setState($mageStatus);
+                        $order->setStatus($mageStatus);
+                        $order->addStatusHistoryComment('Updated by SplashSync Module', false);
+                        $order->save();
+                    } catch (\Throwable $exception) {
+                        return Splash::log()->report($exception);
+                    }
+                }
+
+                break;
         }
 
         return true;
