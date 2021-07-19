@@ -48,7 +48,7 @@ trait StatusTrait
         $this->fieldsFactory()->Create(SPL_T_BOOL)
             ->identifier("isValidated")
             ->name("Is Valid")
-            ->microData("http://schema.org/OrderStatus", "OrderProcessing")
+            ->microData("http://schema.org/OrderStatus", "OrderValidated")
             ->group("Meta")
             ->isReadOnly()
         ;

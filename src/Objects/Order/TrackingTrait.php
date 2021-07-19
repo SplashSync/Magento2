@@ -37,7 +37,7 @@ trait TrackingTrait
         // Order Shipping Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("title")
-            ->name("Shipping Method")
+            ->name("Shipping Method Name")
             ->microData("http://schema.org/ParcelDelivery", "provider")
             ->isReadOnly()
         ;
