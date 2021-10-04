@@ -80,7 +80,9 @@ trait CRUDTrait
                 ->setTypeId('configurable')
                 ->setVisibility(Product\Visibility::VISIBILITY_NOT_VISIBLE)
                 ->setCanSaveConfigurableAttributes(true)
-                ->setAffectConfigurableProductAttributes(MageHelper::getStoreConfig('splashsync/products/attribute_set'))
+                ->setAffectConfigurableProductAttributes(
+                    MageHelper::getStoreConfig('splashsync/products/attribute_set')
+                )
                 ->setNewVariationsAttributeSetId(MageHelper::getStoreConfig('splashsync/products/attribute_set'))
             ;
         }

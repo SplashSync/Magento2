@@ -247,7 +247,11 @@ trait AttributesTrait
                 // Attribute not Found => Cancel Update !!
                 if (!$attributeValue) {
                     Splash::log()->err(
-                        sprintf("Attribute value %s was not found for %s, update skipped.", $attrArray['value'], $attrArray['attribute_code'])
+                        sprintf(
+                            "Attribute value %s was not found for %s, update skipped.",
+                            $attrArray['value'],
+                            $attrArray['attribute_code']
+                        )
                     );
 
                     continue;

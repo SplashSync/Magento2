@@ -19,6 +19,7 @@
 # Override Default Config.
 parameters:
     mode:           "splashsync"
+    exclude:        ['app', 'docs', 'docker', 'build', 'vendor']
     # For Building Splash Module
     mod-enable:     false
     # For Building Splash Documentation

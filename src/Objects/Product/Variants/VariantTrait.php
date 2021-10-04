@@ -81,7 +81,7 @@ trait VariantTrait
      *
      * @return void
      */
-    protected function getVariantsParentFields($key, $fieldName)
+    protected function getVariantsParentFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -109,7 +109,7 @@ trait VariantTrait
      *
      * @return void
      */
-    protected function getVariantChildFields($key, $fieldName)
+    protected function getVariantChildFields(string $key, string $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -166,6 +166,8 @@ trait VariantTrait
      * @param mixed  $fieldData Field Data
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function setVariantsChildFields(string $fieldName, $fieldData)
     {
