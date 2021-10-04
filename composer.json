@@ -44,7 +44,7 @@
     "scripts": {
         "auto-scripts": [
             "rm -Rf ./app ./bin ./dev ./lib ./generated ./phpserver ./pub ./setup ./var",
-            "rm -Rf ./COPYING.txt./*.sample"
+            "rm -Rf ./COPYING.txt ./*.sample"
         ],
         "post-install-cmd": [
             "@auto-scripts"

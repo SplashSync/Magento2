@@ -82,7 +82,7 @@ class OrderStatusHelper extends Status
         }
         //====================================================================//
         // Use Generic Status
-        return array_flip(self::$statuses)[$splashStatus] ?: self::UNKNOWN;
+        return (string) (array_flip(self::$statuses)[$splashStatus] ?: self::UNKNOWN);
     }
 
     /**

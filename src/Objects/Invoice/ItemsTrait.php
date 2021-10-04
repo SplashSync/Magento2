@@ -13,14 +13,14 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Local\Objects\Order;
+namespace Splash\Local\Objects\Invoice;
 
 use Magento\Directory\Model\Currency;
-use Splash\Local\Helpers\SalesItemsGetter;
+use Splash\Local\Helpers\InvoiceItemsGetter;
 use Splash\Local\Objects\Core\CoreItemsTrait;
 
 /**
- * Magento 2 Order Items Fields Access
+ * Magento 2 Invoice Items Fields Access
  */
 trait ItemsTrait
 {
@@ -34,7 +34,7 @@ trait ItemsTrait
         //====================================================================//
         // Order Line Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("qty_ordered")
+            ->identifier("qty")
             ->inList("lines")
             ->name("Quantity")
             ->microData("http://schema.org/QuantitativeValue", "value")
@@ -67,7 +67,7 @@ trait ItemsTrait
             return;
         }
         /** @var Currency $currency */
-        $currency = $this->object->getOrderCurrency();
+        $currency = $this->object->getOrder()->getOrderCurrency();
         //====================================================================//
         // Fill List with Data
         foreach ($products as $index => $product) {
@@ -78,7 +78,7 @@ trait ItemsTrait
                 "lines",
                 $fieldName,
                 $index,
-                SalesItemsGetter::getItemsValues($product, $currency, $fieldId)
+                InvoiceItemsGetter::getItemsValues($product, $currency, $fieldId)
             );
         }
         unset($this->in[$key]);
@@ -91,6 +91,6 @@ trait ItemsTrait
      */
     protected function getShippingDescription(): string
     {
-        return (string) $this->object->getShippingDescription();
+        return (string) $this->object->getOrder()->getShippingDescription();
     }
 }

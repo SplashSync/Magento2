@@ -148,7 +148,7 @@ class L51OrderStatusUpdatesTest extends ObjectsCase
         $quote->getPayment()->importData(array('method' => 'checkmo'));
         //====================================================================//
         // Add Product to Order
-        $quoteItem = $quote->addProduct($product, (int) rand(3, 10));
+        $quoteItem = $quote->addProduct($product, (float) rand(3, 10));
         $this->assertIsObject($quoteItem);
         $quoteItem->calcRowTotal();
         $quote->collectTotals()->save();

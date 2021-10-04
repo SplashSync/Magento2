@@ -24,16 +24,6 @@ class OrderConfigurator extends AbstractConfigurator
 {
     const CONFIGURATION = array(
         //====================================================================//
-        // System - Core Informations
-        //====================================================================//
-        "increment_id" => array(
-            "type" => SPL_T_EMAIL,
-            "itemtype" => "http://schema.org/Order",
-            "itemprop" => "orderNumber",
-            'inlist' => true
-        ),
-
-        //====================================================================//
         // System - Metadata
         //====================================================================//
         "created_at" => array(
@@ -69,7 +59,7 @@ class OrderConfigurator extends AbstractConfigurator
     public function getConfiguration(): array
     {
         return array(
-            "ThirdParty" => array("fields" => self::CONFIGURATION)
+            "Order" => array("fields" => self::CONFIGURATION)
         );
     }
 }

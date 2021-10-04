@@ -16,11 +16,10 @@
 namespace   Splash\Local\Objects;
 
 use Magento\Directory\Model\Currency;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order as MageOrder;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Model\Order\Invoice as MageInvoice;
 use Splash\Local\Helpers\MageHelper;
-use Splash\Local\Helpers\ShipmentsHelper;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\IntelParserTrait;
@@ -28,11 +27,11 @@ use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 
 /**
- * Splash PHP Module For Magento 2 - Order Object Integration
+ * Splash PHP Module For Magento 2 - Invoice Object Integration
  *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Order extends AbstractObject
+class Invoice extends AbstractObject
 {
     // Splash Php Core Traits
     use IntelParserTrait;
@@ -45,15 +44,15 @@ class Order extends AbstractObject
     use Core\ObjectListTrait;
     use Core\WebsitesTrait;
 
-    // Order Traits
-    use Order\CRUDTrait;
+    // Orders Traits
     use Order\ObjectListTrait;
-    use Order\CoreTrait;
+
+    // Invoices Traits
+    use Invoice\CoreTrait;
+    use Invoice\CRUDTrait;
     use Order\MainTrait;
-    use Order\ItemsTrait;
-    use Order\StatusTrait;
-    use Order\ShippingTrait;
-    use Order\TrackingTrait;
+    use Invoice\ItemsTrait;
+//    use Order\StatusTrait;
 
     use ThirdParty\AddressTrait;
 
@@ -83,17 +82,17 @@ class Order extends AbstractObject
      *
      * @var class-string
      */
-    protected static $modelClass = OrderInterface::class;
+    protected static $modelClass = InvoiceInterface::class;
 
     /**
-     * @var OrderRepositoryInterface
+     * @var InvoiceRepositoryInterface
      */
     protected $repository;
 
     /**
      * Magento Product
      *
-     * @var MageOrder
+     * @var MageInvoice
      */
     protected $object;
 
@@ -104,17 +103,17 @@ class Order extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME = "Customer Order";
+    protected static $NAME = "Customer Invoice";
 
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION = "Magento 2 Customers Order Object";
+    protected static $DESCRIPTION = "Magento 2 Customers Invoice Object";
 
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO = "fa fa-shopping-cart ";
+    protected static $ICO = "fa fa-money";
 
     //====================================================================//
     // Object Synchronization Limitations
@@ -172,13 +171,9 @@ class Order extends AbstractObject
      */
     public function __construct()
     {
-        /** @var OrderRepositoryInterface $repository */
-        $repository = MageHelper::getModel(OrderRepositoryInterface::class);
+        /** @var InvoiceRepositoryInterface $repository */
+        $repository = MageHelper::getModel(InvoiceRepositoryInterface::class);
         $this->repository = $repository;
-        if (ShipmentsHelper::isLogisticModeEnabled()) {
-            self::$ALLOW_PUSH_UPDATED = true;
-            self::$ENABLE_PUSH_UPDATED = true;
-        }
     }
 
     /**
@@ -188,6 +183,6 @@ class Order extends AbstractObject
      */
     protected function getCurrency(): ?Currency
     {
-        return $this->object->getOrderCurrency();
+        return $this->object->getOrder()->getOrderCurrency();
     }
 }
