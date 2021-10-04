@@ -1,7 +1,16 @@
 {
     "name":                 "splash/magento2",
     "description":          "Splash Module for Magento 2",
-    "type":                 "package",
+    "type":                 "magento2-module",
+
+    "extra": {
+        "map": [
+            [
+                "*"
+            ]
+        ]
+    },
+
     "license":              "MIT",
     "minimum-stability":    "dev",
     "prefer-stable":        true,
@@ -43,7 +52,7 @@
 
     "scripts": {
         "auto-scripts": [
-            "rm -Rf ./app ./bin ./dev ./lib ./generated ./phpserver ./pub ./setup ./var",
+            "rm -Rf ./bin ./dev ./lib ./generated ./phpserver ./pub ./setup ./var",
             "rm -Rf ./COPYING.txt ./*.sample"
         ],
         "post-install-cmd": [

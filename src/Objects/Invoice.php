@@ -52,7 +52,7 @@ class Invoice extends AbstractObject
     use Invoice\CRUDTrait;
     use Order\MainTrait;
     use Invoice\ItemsTrait;
-//    use Order\StatusTrait;
+    use Invoice\StatusTrait;
 
     use ThirdParty\AddressTrait;
 
