@@ -38,8 +38,6 @@ trait ItemsTrait
             ->inList("lines")
             ->name("Quantity")
             ->microData("http://schema.org/QuantitativeValue", "value")
-            ->association("name@lines", "qty_ordered@lines", "unit_price@lines")
-            ->isRequired()
             ->isReadOnly()
         ;
     }

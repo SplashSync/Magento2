@@ -16,9 +16,11 @@
 namespace Splash\Local\Helpers;
 
 use Magento\Sales\Model\Order;
-use Splash\Core\SplashCore as Splash;
 use Splash\Models\Objects\Order\Status;
 
+/**
+ * Override Splash Core Helper to Manage Magento 2 Orders Statuses
+ */
 class OrderStatusHelper extends Status
 {
     /**

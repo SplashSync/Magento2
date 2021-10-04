@@ -45,7 +45,6 @@ trait CoreItemsTrait
             ->inList("lines")
             ->name("Label")
             ->microData("http://schema.org/partOfInvoice", "name")
-            ->association("name@lines", "qty_ordered@lines", "unit_price@lines")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -55,17 +54,15 @@ trait CoreItemsTrait
             ->inList("lines")
             ->name("Description")
             ->microData("http://schema.org/partOfInvoice", "description")
-            ->association("name@lines", "qty_ordered@lines", "unit_price@lines")
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Line Product identifier
-        $this->fieldsFactory()->create((string) self::objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("Product", SPL_T_ID))
             ->identifier("product_id")
             ->InList("lines")
             ->Name("Product ID")
             ->MicroData("http://schema.org/Product", "productID")
-            ->Association("qty_ordered@lines", "unit_price@lines")
             ->isNotTested()
             ->isReadOnly()
         ;
@@ -76,7 +73,6 @@ trait CoreItemsTrait
             ->inList("lines")
             ->name("Discount (%)")
             ->microData("http://schema.org/Order", "discount")
-            ->association("name@lines", "qty_ordered@lines", "unit_price@lines")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -86,7 +82,6 @@ trait CoreItemsTrait
             ->inList("lines")
             ->name("Price")
             ->microData("http://schema.org/PriceSpecification", "price")
-            ->association("name@lines", "qty_ordered@lines", "unit_price@lines")
             ->isReadOnly()
         ;
     }
