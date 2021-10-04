@@ -1,16 +1,7 @@
 {
     "name":                 "splash/magento2",
     "description":          "Splash Module for Magento 2",
-    "type":                 "magento2-module",
-
-    "extra": {
-        "map": [
-            [
-                "*"
-            ]
-        ]
-    },
-
+    "type":                 "package",
     "license":              "MIT",
     "minimum-stability":    "dev",
     "prefer-stable":        true,
