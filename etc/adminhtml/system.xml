@@ -108,12 +108,20 @@
                     <source_model>Magento\Catalog\Model\Product\AttributeSet\Options</source_model>
                 </field>
 
-                <field id="logistic" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="logistic" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Logistic Mode</label>
                     <comment>Enable Logistic Feature: update of Order Status and Tracking Numbers.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
+                <field id="tracking_url_field" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Tracking Url Field</label>
+                    <comment>Name of field used int Track Collections to store Tracking Url</comment>
+                    <validate>no-whitespace</validate>
+                    <depends>
+                        <field id="splashsync/sync/logistic">1</field>
+                    </depends>
+                </field>
             </group>
 
             <group id="orders" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">

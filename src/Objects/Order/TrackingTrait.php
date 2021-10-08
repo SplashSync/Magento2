@@ -15,8 +15,11 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Shipment\Track;
+use Splash\Client\Splash;
+use Splash\Local\Helpers\MageHelper;
 use Splash\Local\Helpers\ShipmentsHelper;
 
 /**
@@ -24,6 +27,13 @@ use Splash\Local\Helpers\ShipmentsHelper;
  */
 trait TrackingTrait
 {
+    /**
+     * Name of Field to use tracking Url Storage
+     *
+     * @var string
+     */
+    private static $trackingUrlField = "url_tracking";
+
     //====================================================================//
     // General Class Variables
     //====================================================================//
@@ -56,6 +66,15 @@ trait TrackingTrait
             ->name("Tracking Number")
             ->microData("http://schema.org/ParcelDelivery", "trackingNumber")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+        ;
+        //====================================================================//
+        // Order Tracking Url
+        $this->fieldsFactory()->create(SPL_T_URL)
+            ->identifier($this->getTrackingUrlField())
+            ->name("Tracking Url")
+            ->microData("http://schema.org/ParcelDelivery", "trackingUrl")
+            ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+            ->isNotTested()
         ;
     }
 
@@ -168,6 +187,7 @@ trait TrackingTrait
             case 'title':
             case 'carrier_code':
             case 'track_number':
+            case $this->getTrackingUrlField():
                 //====================================================================//
                 // Load First Order Tracking Collection
                 /** @var Track $track */
@@ -188,6 +208,7 @@ trait TrackingTrait
      * @param mixed  $data      Field Data
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function setFirstTrackingFields(string $fieldName, $data): void
     {
@@ -203,9 +224,48 @@ trait TrackingTrait
                 }
 
                 break;
+            case $this->getTrackingUrlField():
+                //====================================================================//
+                // Filter Empty Values
+                if (empty($data) || !is_string($data)) {
+                    break;
+                }
+                //====================================================================//
+                // Load First Order Tracking Collection
+                /** @var null|Track $track */
+                $track = $this->object->getTracksCollection()->getFirstItem();
+                if (!$track || ($track->getData($fieldName) == $data)) {
+                    break;
+                }
+                //====================================================================//
+                // Update Tracking Number
+                try {
+                    $track->setData($fieldName, $data);
+                    $track->save();
+                } catch (Exception $exception) {
+                    Splash::log()->err($exception->getMessage());
+                }
+
+                break;
             default:
                 return;
         }
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Detect Name of Field Used for Tracking Url
+     *
+     * @return string
+     */
+    private function getTrackingUrlField(): string
+    {
+        static $trackingUrlField;
+
+        if (!isset($trackingUrlField)) {
+            $trackingUrlField = MageHelper::getConfig('splashsync/sync/tracking_url_field') ?: "url_tracking";
+        }
+
+        return $trackingUrlField;
     }
 }
