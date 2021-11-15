@@ -18,7 +18,7 @@
 
 set -e
 
-until curl -o - ${MYSQL_HOST}:3306
+until curl -o - ${MYSQL_HOST}:3306 --verbose
 do
   echo "Waiting for database connection... on ${MYSQL_HOST}:3306"
   # wait for 5 seconds before check again
