@@ -168,6 +168,7 @@ trait StatusTrait
      * @return bool
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function doOrderStatusUpdate(Order $order, string $status): bool
     {
@@ -192,7 +193,9 @@ trait StatusTrait
                 //====================================================================//
                 // Only if Order is New
                 if (Order::STATE_NEW == $order->getState()) {
-                    $order->setData("is_in_process", 1)->save();
+                    $order->setData("is_in_process", 1);
+                    $order->addCommentToStatusHistory('Processed by SplashSync');
+                    $order->save();
 
                     break;
                 }
@@ -215,7 +218,7 @@ trait StatusTrait
                 if (Order::STATE_PROCESSING == $order->getState()) {
                     $order->setState(Order::STATE_COMPLETE);
                     $order->setStatus(Order::STATE_COMPLETE);
-                    $order->addStatusHistoryComment('Updated by SplashSync', false);
+                    $order->addCommentToStatusHistory('Completed by SplashSync');
                     $order->setData("is_in_process", 1);
                     $order->save();
 
@@ -226,7 +229,7 @@ trait StatusTrait
             case Order::STATE_CLOSED:
                 $order->setState(Order::STATE_CLOSED);
                 $order->setStatus(Order::STATE_CLOSED);
-                $order->addStatusHistoryComment('Updated by SplashSync Module', false);
+                $order->addCommentToStatusHistory('Closed by SplashSync Module');
                 $order->save();
 
                 break;
@@ -255,7 +258,7 @@ trait StatusTrait
                     try {
                         $order->setState($mageStatus);
                         $order->setStatus($mageStatus);
-                        $order->addStatusHistoryComment('Updated by SplashSync Module', false);
+                        $order->addCommentToStatusHistory('Updated by SplashSync');
                         $order->save();
                     } catch (\Throwable $exception) {
                         return Splash::log()->report($exception);
