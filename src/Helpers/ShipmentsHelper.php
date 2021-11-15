@@ -92,7 +92,10 @@ class ShipmentsHelper
             //====================================================================//
             // Save created shipment and order
             $shipment->save();
-            $shipment->getOrder()->save();
+            $order = $shipment->getOrder();
+            $order->addCommentToStatusHistory('Shipment Created by SplashSync');
+            $order->save();
+
             Splash::log()->war("Order Shipment Created : ".$shipment->getIncrementId());
             //====================================================================//
             // Add Shipment to Order
