@@ -36,7 +36,6 @@ services:
     ################################################################################
     # Magento 2 Latest
     magento:
-#        image: registry.gitlab.com/splashsync/magento2:2.4-php7.4
         build:
             context:    ./docker/magento
             dockerfile: mage-2.4-php7.4.Dockerfile
