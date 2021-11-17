@@ -7,6 +7,6 @@
     "prefer-stable":        true,
     "require": {
         "php":                                  "^7.2",
-        "splash/phpcore":                       "dev-master"
+        "splash/phpcore":                       "dev-local"
     }
 }
