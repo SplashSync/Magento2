@@ -131,7 +131,7 @@ pages:
     ################################################################################
     # Run Test Script
     script:
-        - cp  ./docker/magento/conf/auth.json ~/.composer
+        - cp  ./docker/magento/conf/auth.json ~/.composer/
         # Run Composer to Build Dependencies
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
         # Build Documentation
