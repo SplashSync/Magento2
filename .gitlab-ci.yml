@@ -131,7 +131,7 @@ pages:
     ################################################################################
     # Run Test Script
     script:
-        - cp  ./conf/auth.json $COMPOSER_HOME
+        - cp  ./conf/auth.json ~/.composer
         # Run Composer to Build Dependencies
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
         # Build Documentation
