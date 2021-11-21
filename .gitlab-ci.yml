@@ -132,7 +132,7 @@ pages:
     # Run Test Script
     script:
         # Run Composer to Build Dependencies
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+        - composer update  --prefer-dist --no-interaction --no-progress --no-scripts
         # Build Documentation
         - php vendor/bin/grumphp run --tasks=build-docs
     artifacts:
