@@ -123,7 +123,7 @@ quality_tests:
 # Build Documentation
 ################################################################
 pages:
-    image:      registry.gitlab.com/splashsync/php-console:pages
+    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
     stage:      deploy
     retry:      2
     tags:
