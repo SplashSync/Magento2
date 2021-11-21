@@ -9,7 +9,7 @@ su www-data -c "composer create-project --no-progress --repository-url=https://r
 echo "Install SplashSync Module via Composer"
 composer config repositories.splash '{ "type": "path", "url": "/builds/SplashSync/Magento2", "options": { "symlink": true, "versions": { "splash/magento2": "dev-local" }}}'
 composer config minimum-stability dev
-COMPOSER_MEMORY_LIMIT=-1 composer require splash/magento2:dev-local --no-scripts --no-progress --no-suggest
+COMPOSER_MEMORY_LIMIT=-1 composer require splash/magento2:dev-local splash/console:dev-master --no-scripts --no-progress --no-suggest
 composer info | grep "splash"
 
 chmod 770 -Rf $INSTALL_DIR && chmod u+x bin/magento && chown -R www-data:www-data /var/www

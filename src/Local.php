@@ -104,6 +104,9 @@ class Local implements LocalClassInterface
         static $isAreaSetupDone;
 
         //====================================================================//
+        // When Library is called from Splash Console CLI ONLY
+        $this->detectSplashConsole();
+        //====================================================================//
         // When Library is called in server mode ONLY
         if (defined("SPLASH_SERVER_MODE") && !empty(SPLASH_SERVER_MODE)) {
             if (!isset($isAreaSetupDone)) {
@@ -158,8 +161,8 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server General Description
-        $response->shortdesc = "Splash Module for Magento 1";
-        $response->longdesc = "Splash SOAP Connector Module for Magento 1.";
+        $response->shortdesc = "Splash Module for Magento 2";
+        $response->longdesc = "Splash Connector for Magento 2 | Adobe Commerce.";
 
         //====================================================================//
         // Company Informations
@@ -430,5 +433,45 @@ class Local implements LocalClassInterface
         $module = $moduleList->getOne("SplashSync_Magento2");
 
         return $module ? $module['setup_version'] : 'Unknown';
+    }
+
+    /**
+     * Detect Splash Console && Boot Magento
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    private function detectSplashConsole(): void
+    {
+        //====================================================================//
+        // We Are on CLI
+        if (PHP_SAPI !== 'cli') {
+            return;
+        }
+        //====================================================================//
+        // Root File is Splash Console
+        if ('splash' != basename(filter_input(INPUT_SERVER, "PHP_SELF"))) {
+            return;
+        }
+        //====================================================================//
+        // Load Magento
+        try {
+            require '/var/www/html/app/bootstrap.php';
+        } catch (\Exception $e) {
+            echo 'Autoload error: '.$e->getMessage();
+            exit(1);
+        }
+        //====================================================================//
+        // Boot Magento
+        try {
+            new \Magento\Framework\Console\Cli('Magento CLI');
+        } catch (\Exception $e) {
+            echo 'Boot Error: '.$e->getMessage();
+            exit(1);
+        }
+        //====================================================================//
+        // Force Server Host
+        Splash::configuration()->ServerHost = "localhost";
     }
 }
