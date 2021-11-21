@@ -80,3 +80,6 @@ atlassian*
 /.php_cs.dist
 /composer.lock
 /SECURITY.md
+/public/
+/reboot.sh
+/.gh-pages/
