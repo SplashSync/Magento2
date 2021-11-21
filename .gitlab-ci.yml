@@ -43,9 +43,9 @@ variables:
 ################################################################
 # Defined Pipeline Stages
 stages:
-  - deploy
   - docker
   - Mage-2.4
+  - deploy
 
 ################################################################
 # Functional Tests
@@ -132,7 +132,6 @@ pages:
     # Run Test Script
     script:
         # Run Composer to Build Dependencies
-#         - composer update  --prefer-dist --no-interaction --no-progress --no-scripts
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
         # Build Documentation
         - php vendor/bin/grumphp run --tasks=build-docs
