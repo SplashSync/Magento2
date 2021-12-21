@@ -49,6 +49,7 @@ trait TrackingTrait
             ->identifier("title")
             ->name("Shipping Method Name")
             ->microData("http://schema.org/ParcelDelivery", "provider")
+            ->group("Tracking")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -57,6 +58,7 @@ trait TrackingTrait
             ->identifier("carrier_code")
             ->name("Carrier Code")
             ->microData("http://schema.org/ParcelDelivery", "alternateName")
+            ->group("Tracking")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -65,6 +67,16 @@ trait TrackingTrait
             ->identifier("track_number")
             ->name("Tracking Number")
             ->microData("http://schema.org/ParcelDelivery", "trackingNumber")
+            ->group("Tracking")
+            ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+        ;
+        //====================================================================//
+        // Order Tracking Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("track_title")
+            ->name("Tracking Name")
+            ->microData("http://schema.org/ParcelDelivery", "name")
+            ->group("Tracking")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
         ;
         //====================================================================//
@@ -73,6 +85,7 @@ trait TrackingTrait
             ->identifier($this->getTrackingUrlField())
             ->name("Tracking Url")
             ->microData("http://schema.org/ParcelDelivery", "trackingUrl")
+            ->group("Tracking")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
             ->isNotTested()
         ;
@@ -195,6 +208,14 @@ trait TrackingTrait
                 $this->out[$fieldName] = $track->getEntityId() ? $track->getData($fieldName) : null;
 
                 break;
+            case 'track_title':
+                //====================================================================//
+                // Load First Order Tracking Collection
+                /** @var Track $track */
+                $track = $this->object->getTracksCollection()->getFirstItem();
+                $this->out[$fieldName] = $track->getEntityId() ? $track->getData("title") : null;
+
+                break;
             default:
                 return;
         }
@@ -225,26 +246,11 @@ trait TrackingTrait
 
                 break;
             case $this->getTrackingUrlField():
-                //====================================================================//
-                // Filter Empty Values
-                if (empty($data) || !is_string($data)) {
-                    break;
-                }
-                //====================================================================//
-                // Load First Order Tracking Collection
-                /** @var null|Track $track */
-                $track = $this->object->getTracksCollection()->getFirstItem();
-                if (!$track || ($track->getData($fieldName) == $data)) {
-                    break;
-                }
-                //====================================================================//
-                // Update Tracking Number
-                try {
-                    $track->setData($fieldName, $data);
-                    $track->save();
-                } catch (Exception $exception) {
-                    Splash::log()->err($exception->getMessage());
-                }
+                $this->setFirstTrackingField($fieldName, $data);
+
+                break;
+            case 'track_title':
+                $this->setFirstTrackingField("title", $data);
 
                 break;
             default:
@@ -267,5 +273,37 @@ trait TrackingTrait
         }
 
         return $trackingUrlField;
+    }
+
+    /**
+     * Write A Specific First Tracking Item Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $data      Field Data
+     *
+     * @return void
+     */
+    private function setFirstTrackingField(string $fieldName, $data): void
+    {
+        //====================================================================//
+        // Filter Empty Values
+        if (empty($data) || !is_string($data)) {
+            return;
+        }
+        //====================================================================//
+        // Load First Order Tracking Collection
+        /** @var null|Track $track */
+        $track = $this->object->getTracksCollection()->getFirstItem();
+        if (!$track || ($track->getData($fieldName) == $data)) {
+            return;
+        }
+        //====================================================================//
+        // Update Tracking Number
+        try {
+            $track->setData($fieldName, $data);
+            $track->save();
+        } catch (Exception $exception) {
+            Splash::log()->err($exception->getMessage());
+        }
     }
 }
