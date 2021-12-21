@@ -44,24 +44,6 @@ trait TrackingTrait
     protected function buildFirstTrackingFields(): void
     {
         //====================================================================//
-        // Order Shipping Method
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("title")
-            ->name("Shipping Method Name")
-            ->microData("http://schema.org/ParcelDelivery", "provider")
-            ->group("Tracking")
-            ->isReadOnly()
-        ;
-        //====================================================================//
-        // Order Shipping Method
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("carrier_code")
-            ->name("Carrier Code")
-            ->microData("http://schema.org/ParcelDelivery", "alternateName")
-            ->group("Tracking")
-            ->isReadOnly()
-        ;
-        //====================================================================//
         // Order Tracking Number
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("track_number")
@@ -71,11 +53,20 @@ trait TrackingTrait
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
         ;
         //====================================================================//
-        // Order Tracking Name
+        // Order Shipping Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("track_title")
-            ->name("Tracking Name")
-            ->microData("http://schema.org/ParcelDelivery", "name")
+            ->identifier("title")
+            ->name("Shipping Method Name")
+            ->microData("http://schema.org/ParcelDelivery", "provider")
+            ->group("Tracking")
+            ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+        ;
+        //====================================================================//
+        // Order Shipping Method
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("carrier_code")
+            ->name("Carrier Code")
+            ->microData("http://schema.org/ParcelDelivery", "alternateName")
             ->group("Tracking")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
         ;
@@ -208,14 +199,6 @@ trait TrackingTrait
                 $this->out[$fieldName] = $track->getEntityId() ? $track->getData($fieldName) : null;
 
                 break;
-            case 'track_title':
-                //====================================================================//
-                // Load First Order Tracking Collection
-                /** @var Track $track */
-                $track = $this->object->getTracksCollection()->getFirstItem();
-                $this->out[$fieldName] = $track->getEntityId() ? $track->getData("title") : null;
-
-                break;
             default:
                 return;
         }
@@ -236,21 +219,16 @@ trait TrackingTrait
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
-            //====================================================================//
-            // ORDER Currency Data
-            //====================================================================//
-            case 'track_number':
-                if (!empty($data) && is_string($data)) {
-                    ShipmentsHelper::setOrderTrackingNumber($this->object, $data);
-                }
-
-                break;
+            case 'title':
+            case 'carrier_code':
             case $this->getTrackingUrlField():
                 $this->setFirstTrackingField($fieldName, $data);
 
                 break;
-            case 'track_title':
-                $this->setFirstTrackingField("title", $data);
+            case 'track_number':
+                if (!empty($data) && is_string($data)) {
+                    ShipmentsHelper::setOrderTrackingNumber($this->object, $data);
+                }
 
                 break;
             default:
