@@ -49,8 +49,9 @@ trait TrackingTrait
             ->identifier("track_number")
             ->name("Tracking Number")
             ->microData("http://schema.org/ParcelDelivery", "trackingNumber")
-            ->group("Tracking")
+            ->group("First Track")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+            ->setPreferWrite()
         ;
         //====================================================================//
         // Order Shipping Method
@@ -58,8 +59,9 @@ trait TrackingTrait
             ->identifier("title")
             ->name("Shipping Method Name")
             ->microData("http://schema.org/ParcelDelivery", "provider")
-            ->group("Tracking")
+            ->group("First Track")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+            ->setPreferWrite()
         ;
         //====================================================================//
         // Order Shipping Method
@@ -67,8 +69,9 @@ trait TrackingTrait
             ->identifier("carrier_code")
             ->name("Carrier Code")
             ->microData("http://schema.org/ParcelDelivery", "alternateName")
-            ->group("Tracking")
+            ->group("First Track")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+            ->setPreferWrite()
         ;
         //====================================================================//
         // Order Tracking Url
@@ -76,8 +79,9 @@ trait TrackingTrait
             ->identifier($this->getTrackingUrlField())
             ->name("Tracking Url")
             ->microData("http://schema.org/ParcelDelivery", "trackingUrl")
-            ->group("Tracking")
+            ->group("First Track")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
+            ->setPreferWrite()
             ->isNotTested()
         ;
     }
