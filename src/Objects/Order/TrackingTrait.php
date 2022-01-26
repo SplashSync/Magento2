@@ -64,7 +64,7 @@ trait TrackingTrait
             ->setPreferWrite()
         ;
         //====================================================================//
-        // Order Shipping Method
+        // Order Shipping Carrier Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("carrier_code")
             ->name("Carrier Code")
@@ -72,6 +72,15 @@ trait TrackingTrait
             ->group("First Track")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
             ->setPreferWrite()
+        ;
+        //====================================================================//
+        // Order Shipping Carrier Code Formatted
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("carrier_code_snake")
+            ->name("Carrier Code Formatted")
+            ->description("Carrier Code, converted to lowercase and snake_case formatted")
+            ->group("First Track")
+            ->isWriteOnly()
         ;
         //====================================================================//
         // Order Tracking Url
@@ -227,6 +236,13 @@ trait TrackingTrait
             case 'carrier_code':
             case $this->getTrackingUrlField():
                 $this->setFirstTrackingField($fieldName, $data);
+
+                break;
+            case 'carrier_code_snake':
+                //====================================================================//
+                // Convert Data to Snake Case
+                $data = str_replace(" ", "_", strtolower($data));
+                $this->setFirstTrackingField('carrier_code', $data);
 
                 break;
             case 'track_number':
