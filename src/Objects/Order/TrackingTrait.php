@@ -64,6 +64,15 @@ trait TrackingTrait
             ->setPreferWrite()
         ;
         //====================================================================//
+        // Order Shipping Method
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("title_pascal")
+            ->name("Shipping Method Name Formatted")
+            ->description("Shipping Method, Capitalized")
+            ->group("First Track")
+            ->isWriteOnly()
+        ;
+        //====================================================================//
         // Order Shipping Carrier Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("carrier_code")
@@ -236,6 +245,12 @@ trait TrackingTrait
             case 'carrier_code':
             case $this->getTrackingUrlField():
                 $this->setFirstTrackingField($fieldName, $data);
+
+                break;
+            case 'title_pascal':
+                //====================================================================//
+                // Convert Data to Capitalize
+                $this->setFirstTrackingField('title', ucwords(strtolower($data)));
 
                 break;
             case 'carrier_code_snake':
