@@ -64,15 +64,6 @@ trait TrackingTrait
             ->setPreferWrite()
         ;
         //====================================================================//
-        // Order Shipping Method
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("title_pascal")
-            ->name("Shipping Method Name Formatted")
-            ->description("Shipping Method, Capitalized")
-            ->group("First Track")
-            ->isWriteOnly()
-        ;
-        //====================================================================//
         // Order Shipping Carrier Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("carrier_code")
@@ -81,6 +72,15 @@ trait TrackingTrait
             ->group("First Track")
             ->isReadOnly(!ShipmentsHelper::isLogisticModeEnabled())
             ->setPreferWrite()
+        ;
+        //====================================================================//
+        // Order Shipping Carrier Code Formatted
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("carrier_code_lower")
+            ->name("Carrier Code Lowercase")
+            ->description("Carrier Code, converted to lowercase")
+            ->group("First Track")
+            ->isWriteOnly()
         ;
         //====================================================================//
         // Order Shipping Carrier Code Formatted
@@ -247,10 +247,10 @@ trait TrackingTrait
                 $this->setFirstTrackingField($fieldName, $data);
 
                 break;
-            case 'title_pascal':
+            case 'carrier_code_lower':
                 //====================================================================//
-                // Convert Data to Capitalize
-                $this->setFirstTrackingField('title', ucwords(strtolower($data)));
+                // Convert Data to Lower Case
+                $this->setFirstTrackingField('carrier_code', strtolower($data));
 
                 break;
             case 'carrier_code_snake':
