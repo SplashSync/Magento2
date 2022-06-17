@@ -59,7 +59,11 @@ trait ObjectListTrait
         if (!empty($filters)) {
             $collection->addFieldToFilter($filters);
         }
-        if (!empty($attrFilters) && method_exists($collection, "addFieldToSearchFilter")) {
+        if (!empty($attrFilters) && method_exists($collection, "addFieldToFilter")) {
+            foreach ($attrFilters as $attributeName => $condition) {
+                $collection->addFieldToFilter($attributeName, $condition);
+            }
+        } elseif (!empty($attrFilters) && method_exists($collection, "addFieldToSearchFilter")) {
             foreach ($attrFilters as $attributeName => $condition) {
                 $collection->addFieldToSearchFilter($attributeName, $condition);
             }
