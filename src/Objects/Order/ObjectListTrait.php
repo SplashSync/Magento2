@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Local\Helpers\AccessHelper;
+
 /**
  * Magento 2 Orders Address Objects Lists Access
  */
@@ -33,7 +35,7 @@ trait ObjectListTrait
         //====================================================================//
         // Setup filters
         $filters = array(
-            'store_id' => array('in' => array("1"))
+            'store_id' => array('in' => AccessHelper::getAllowedWebsites())
         );
         if (!empty($filter) && is_string($filter)) {
             $filters = array(
