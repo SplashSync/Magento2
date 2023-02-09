@@ -162,6 +162,7 @@ pages:
         - docker push registry.gitlab.com/splashsync/magento2:$DOCKER_TAG
     only:
         changes:
+            - .gitlab-ci.yml
             - docker/magento/*
             - docker/magento/scripts/*
             - docker/magento/conf/*
