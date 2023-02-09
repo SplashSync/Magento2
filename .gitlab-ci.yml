@@ -144,26 +144,31 @@ pages:
 ################################################################
 # Build Docker Images for Testing
 ################################################################
-docker:
-  #    when:       manual
-  stage:      docker
-  image:      docker:stable
-  tags:       ['Dedicated-Docker']
-  services:
-    - docker:dind
-  before_script:
-    - docker info
-  script:
-    - echo "Build & Upload Docker Image"
-    # Connect Docker to GitLab
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    # Build & Upload Splash All Docker Images
-    - docker build -t registry.gitlab.com/splashsync/magento2:2.4-php7.4 -f docker/magento/mage-2.4-php7.4.Dockerfile docker/magento
-    - docker push registry.gitlab.com/splashsync/magento2:2.4-php7.4
-  only:
-      changes:
-          - docker/magento/*
-          - docker/magento/scripts/*
-          - docker/magento/conf/*
-  except:
-    - schedules
+.docker: &docker
+    #    when:       manual
+    stage:      docker
+    image:      docker:stable
+    tags:       ['Dedicated-Docker']
+    services:
+        - docker:dind
+    before_script:
+        - docker info
+    script:
+        - echo "Build & Upload Docker Image"
+        # Connect Docker to GitLab
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+        # Build & Upload Splash All Docker Images
+        - docker build -t registry.gitlab.com/splashsync/magento2:$DOCKER_TAG -f docker/magento/mage-$DOCKER_TAG.Dockerfile docker/magento
+        - docker push registry.gitlab.com/splashsync/magento2:$DOCKER_TAG
+    only:
+        changes:
+            - docker/magento/*
+            - docker/magento/scripts/*
+            - docker/magento/conf/*
+    except:
+        - schedules
+
+docker:2.4-php7.4:
+    <<: *docker
+    variables:
+            DOCKER_TAG:    2.4-php7.4
