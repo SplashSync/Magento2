@@ -44,16 +44,96 @@ variables:
 # Defined Pipeline Stages
 stages:
   - docker
-  - Mage-2.4
+  - quality
+  - functional
   - deploy
+
+################################################################
+# Build Docker Images for Testing
+################################################################
+.docker: &docker
+    #    when:       manual
+    stage:      docker
+    image:      docker:stable
+    tags:       ['Dedicated-Docker']
+    services:
+        - docker:dind
+    before_script:
+        - docker info
+    script:
+        - echo "Build & Upload Docker Image"
+        # Connect Docker to GitLab
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+        # Build & Upload Splash All Docker Images
+        - docker build -t registry.gitlab.com/splashsync/magento2:$DOCKER_TAG -f docker/magento/mage-$DOCKER_TAG.Dockerfile docker/magento
+        - docker push registry.gitlab.com/splashsync/magento2:$DOCKER_TAG
+    only:
+        changes:
+            - .gitlab-ci.yml
+            - docker/magento/*
+            - docker/magento/scripts/*
+            - docker/magento/conf/*
+    except:
+        - schedules
+
+docker:2.4-php7.4:
+    <<: *docker
+    variables:
+            DOCKER_TAG:    2.4-php7.4
+
+docker:2.4-php8.1:
+    <<: *docker
+    variables:
+            DOCKER_TAG:    2.4-php8.1
+
+################################################################
+# Quality Tests
+################################################################
+
+.quality_tests: &quality_tests
+    stage:      quality
+    tags:
+        - Dedicated
+    services:
+        - name: mysql:5.7
+    ################################################################################
+    # Run Test Script
+    script:
+        ################################################################################
+        - echo "\033[32m QUALITY TESTS --> Compile        \033[0m"
+        - composer config --global home
+        - echo $HOME/.composer
+        - cp ./docker/magento/conf/auth.json /root/.config/composer
+        - composer update  --no-scripts --no-plugins
+        ################################################################################
+        - echo "\033[32m QUALITY TESTS --> Grumphp Travis        \033[0m"
+        - php vendor/bin/grumphp run --testsuite=travis
+        - php vendor/bin/grumphp run --testsuite=csfixer
+        - php vendor/bin/grumphp run --testsuite=phpstan
+    ################################################################################
+    # Run After Script
+    after_script:
+        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/after.sh | sh
+
+quality:2.4-php7.4:
+    image: registry.gitlab.com/badpixxel-projects/php-sdk:php-7.4
+    <<: *quality_tests
+
+quality:2.4-php8.0:
+    image: registry.gitlab.com/badpixxel-projects/php-sdk:php-8.0
+    <<: *quality_tests
+
+quality:2.4-php8.1:
+    image: registry.gitlab.com/badpixxel-projects/php-sdk:php-8.1
+    <<: *quality_tests
 
 ################################################################
 # Functional Tests
 ################################################################
 
-core_tests:
+.functional_tests: &functional_tests
     image:      registry.gitlab.com/splashsync/magento2:2.4-php7.4
-    stage:      Mage-2.4
+    stage:      functional
     retry:      2
     tags:
       - Dedicated
@@ -89,36 +169,13 @@ core_tests:
         - echo "\033[32m UNIT TESTS --> Full                     \033[0m"
         - php /usr/bin/phpunit --testsuite=Core --log-junit $CI_PROJECT_DIR/main-report.xml
 
+functional:2.4-php7.4:
+    image:      registry.gitlab.com/splashsync/magento2:2.4-php7.4
+    <<: *functional_tests
 
-################################################################
-# Quality Tests
-################################################################
-
-quality_tests:
-    image: registry.gitlab.com/badpixxel-projects/php-sdk:php-7.4
-    stage:      Mage-2.4
-    tags:
-        - Dedicated
-    services:
-        - name: mysql:5.7
-    ################################################################################
-    # Run Test Script
-    script:
-        ################################################################################
-        - echo "\033[32m QUALITY TESTS --> Compile        \033[0m"
-        - composer config --global home
-        - echo $HOME/.composer
-        - cp ./docker/magento/conf/auth.json /root/.config/composer
-        - composer update  --no-scripts --no-plugins
-        ################################################################################
-        - echo "\033[32m QUALITY TESTS --> Grumphp Travis        \033[0m"
-        - php vendor/bin/grumphp run --testsuite=travis
-        - php vendor/bin/grumphp run --testsuite=csfixer
-        - php vendor/bin/grumphp run --testsuite=phpstan
-    ################################################################################
-    # Run After Script
-    after_script:
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/after.sh | sh
+functional:2.4-php8.1:
+    image:      registry.gitlab.com/splashsync/magento2:2.4-php8.1
+    <<: *functional_tests
 
 
 ################################################################
@@ -141,35 +198,4 @@ pages:
         paths:
             - public
 
-################################################################
-# Build Docker Images for Testing
-################################################################
-.docker: &docker
-    #    when:       manual
-    stage:      docker
-    image:      docker:stable
-    tags:       ['Dedicated-Docker']
-    services:
-        - docker:dind
-    before_script:
-        - docker info
-    script:
-        - echo "Build & Upload Docker Image"
-        # Connect Docker to GitLab
-        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-        # Build & Upload Splash All Docker Images
-        - docker build -t registry.gitlab.com/splashsync/magento2:$DOCKER_TAG -f docker/magento/mage-$DOCKER_TAG.Dockerfile docker/magento
-        - docker push registry.gitlab.com/splashsync/magento2:$DOCKER_TAG
-    only:
-        changes:
-            - .gitlab-ci.yml
-            - docker/magento/*
-            - docker/magento/scripts/*
-            - docker/magento/conf/*
-    except:
-        - schedules
 
-docker:2.4-php7.4:
-    <<: *docker
-    variables:
-            DOCKER_TAG:    2.4-php7.4

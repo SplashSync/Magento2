@@ -1,11 +1,11 @@
-FROM php:7.4-apache
+FROM php:8.1-apache
 
-LABEL description="Magento 2.4 with PHP 7.4 for SplashSync CI"
+LABEL description="Magento 2.4 with PHP 8.1 for SplashSync CI"
 
 ################################################################################
 # Declare Env Variables
 ################################################################################
-ENV MAGENTO_VERSION         2.4.4
+ENV MAGENTO_VERSION         2.4.5
 ENV INSTALL_DIR             /var/www/html
 ENV MODULE_DIR              /builds/SplashSync/Magento2
 ENV COMPOSER_HOME           /var/www/.composer/
