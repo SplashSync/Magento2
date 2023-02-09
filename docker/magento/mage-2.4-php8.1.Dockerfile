@@ -28,7 +28,7 @@ RUN requirements="cron git libpng++-dev libzip-dev libmcrypt-dev libmcrypt4 libc
     && docker-php-ext-install bcmath \
     && docker-php-ext-install sockets
 
-RUN yes '' | pecl install mcrypt-1.0.3 \
+RUN yes '' | pecl install mcrypt-1.0.5 \
     && echo 'extension=mcrypt.so' > /usr/local/etc/php/conf.d/mcrypt.ini
 
 ################################################################################

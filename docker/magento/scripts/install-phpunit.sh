@@ -24,7 +24,7 @@ set -e
 
 if [ ! -f /usr/bin/phpunit ]; then
     echo "Install Phpunit"
-    curl https://phar.phpunit.de/phpunit-8.5.9.phar -o phpunit
+    curl https://phar.phpunit.de/phpunit-9.5.28.phar -o phpunit
     chown -R www-data:www-data phpunit
     chmod -X phpunit
     mv phpunit /usr/bin/phpunit
