@@ -58,13 +58,6 @@ trait MainTrait
             ->name("Street 2")
             ->microData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
         ;
-        //====================================================================//
-        // Street Address 3
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("street_3")
-            ->name("Street 3")
-            ->association("street_1", "street_2")
-        ;
     }
 
     /**
@@ -86,10 +79,6 @@ trait MainTrait
                 break;
             case 'street_2':
                 $this->out[$fieldName] = self::getStreet($this->object, 1);
-
-                break;
-            case 'street_3':
-                $this->out[$fieldName] = self::getStreet($this->object, 2);
 
                 break;
             default:
@@ -117,15 +106,6 @@ trait MainTrait
                 break;
             case 'street_2':
                 $this->updateStreet(1, $fieldData);
-
-                break;
-            case 'street_3':
-                //====================================================================//
-                // Street 2 Must be Set before Street 3
-                if (isset($this->in["street_2"])) {
-                    $this->updateStreet(1, $this->in["street_2"]);
-                }
-                $this->updateStreet(2, $fieldData);
 
                 break;
             default:
