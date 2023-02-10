@@ -31,7 +31,7 @@ use Magento\User\Model\User;
 /**
  * Access to Magento 2 Services
  */
-trait MageHelper
+class MageHelper
 {
     /**
      * @var ObjectManager
