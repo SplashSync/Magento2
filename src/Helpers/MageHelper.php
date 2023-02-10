@@ -85,7 +85,7 @@ class MageHelper
      *
      * @param class-string $modelClass
      *
-     * @return mixed
+     * @return object
      */
     public static function createModel(string $modelClass): object
     {
@@ -173,6 +173,7 @@ class MageHelper
     public static function getStore():Store
     {
         if (!isset(self::$store)) {
+            /** @phpstan-ignore-next-line */
             self::$store = self::getStoreManager()->getStore();
         }
 
@@ -202,6 +203,7 @@ class MageHelper
     {
         if (!isset(self::$newWebsite)) {
             $websiteId = self::getStoreConfig("splashsync/sync/website") ?: 1;
+            /** @phpstan-ignore-next-line */
             self::$newWebsite = self::getStoreManager()->getWebsite($websiteId);
         }
 
