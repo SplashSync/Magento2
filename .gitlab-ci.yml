@@ -177,21 +177,21 @@ functional:2.4-php8.1:
 ################################################################
 # Build Documentation
 ################################################################
-pages:
-    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll-7.4
-    stage:      deploy
-    retry:      2
-    tags:
-        - Dedicated
-    ################################################################################
-    # Run Test Script
-    script:
-        # Run Composer to Build Dependencies
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-        # Build Documentation
-        - php vendor/bin/grumphp run --tasks=build-docs
-    artifacts:
-        paths:
-            - public
+#pages:
+#    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll-7.4
+#    stage:      deploy
+#    retry:      2
+#    tags:
+#        - Dedicated
+#    ################################################################################
+#    # Run Test Script
+#    script:
+#        # Run Composer to Build Dependencies
+#        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+#        # Build Documentation
+#        - php vendor/bin/grumphp run --tasks=build-docs
+#    artifacts:
+#        paths:
+#            - public
 
 
